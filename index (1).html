@@ -1,0 +1,2403 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>StreamVibe - Corporate IPTV & Premium Streaming</title>
+  <meta name="description" content="Ultra HD streaming platform with live channels, blockbuster movies, series, and flexible subscription plans." />
+  <meta property="og:title" content="StreamVibe - Corporate IPTV & Premium Streaming" />
+  <meta property="og:description" content="Ultra HD streaming platform with live channels, blockbuster movies, series, and flexible subscription plans." />
+  <meta property="og:type" content="website" />
+  
+  <!-- Google Fonts: Plus Jakarta Sans for refined corporate streaming aesthetics -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+  
+  <!-- Tailwind CSS via CDN with custom color scheme -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            sans: ['"Plus Jakarta Sans"', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          },
+          colors: {
+            brand: {
+              green: '#22c55e',
+              emerald: '#10b981',
+              neon: '#00ff88',
+              dark: '#0b0b0e',
+              surface: '#13131a',
+              card: '#181824',
+              border: '#232334',
+              hover: '#222235'
+            }
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Lucide Icons CDN -->
+  <script src="https://unpkg.com/lucide@latest"></script>
+
+  <style>
+    /* Base theme styling */
+    :root {
+      --bg-main: #0b0b0e;
+      --card-bg: #13131a;
+      --border-color: #232334;
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #22c55e;
+    }
+
+    html.light {
+      --bg-main: #f8fafc;
+      --card-bg: #ffffff;
+      --border-color: #e2e8f0;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --accent: #16a34a;
+    }
+
+    body {
+      background-color: var(--bg-main);
+      color: var(--text-main);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      overflow-x: hidden;
+      transition: background-color 0.25s ease, color 0.25s ease;
+    }
+
+    /* Custom scrollbar */
+    ::-webkit-scrollbar {
+      width: 6px;
+      height: 6px;
+    }
+    ::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    ::-webkit-scrollbar-thumb {
+      background: #334155;
+      border-radius: 9999px;
+    }
+    ::-webkit-scrollbar-thumb:hover {
+      background: #475569;
+    }
+
+    /* Glow effects */
+    .glow-green {
+      box-shadow: 0 0 25px -4px rgba(34, 197, 94, 0.45);
+    }
+    .glow-border {
+      box-shadow: 0 0 0 1px rgba(34, 197, 94, 0.5), 0 0 20px -2px rgba(34, 197, 94, 0.3);
+    }
+    .poster-card:hover .poster-overlay {
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .poster-card:hover .poster-img {
+      transform: scale(1.05);
+    }
+
+    /* Hide elements smoothly */
+    .view-section {
+      display: none;
+      animation: fadeIn 0.2s ease-in-out forwards;
+    }
+    .view-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Video player animation */
+    @keyframes pulseLive {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    .live-dot {
+      animation: pulseLive 2s infinite ease-in-out;
+    }
+  </style>
+</head>
+
+<body class="min-h-screen flex flex-col antialiased selection:bg-emerald-500 selection:text-white">
+
+  <!-- ========================================================= -->
+  <!-- TOP NAVIGATION BAR (Zone 1: Brand | Zone 2: Search & Live Stats | Zone 3: Actions) -->
+  <!-- ========================================================= -->
+  <header class="sticky top-0 z-40 w-full border-b backdrop-blur-xl border-slate-800/80 bg-[#0b0b0e]/90 light:bg-white/95 light:border-slate-200 transition-colors">
+    <div class="max-w-[1720px] mx-auto px-4 sm:px-6 lg:px-8 h-18 flex items-center justify-between gap-4">
+      
+      <!-- Brand Zone -->
+      <div class="flex items-center gap-3 shrink-0">
+        <button id="mobileMenuToggle" class="lg:hidden p-2 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800/60 transition-colors" aria-label="Toggle navigation">
+          <i data-lucide="menu" class="w-5 h-5"></i>
+        </button>
+        <a href="#" onclick="switchView('home'); return false;" class="flex items-center gap-2.5 group">
+          <div class="w-9 h-9 rounded-xl bg-gradient-to-tr from-emerald-600 via-green-500 to-emerald-400 flex items-center justify-center text-white shadow-lg shadow-emerald-500/20 group-hover:scale-105 transition-transform">
+            <i data-lucide="play" class="w-5 h-5 fill-current"></i>
+          </div>
+          <div class="flex flex-col">
+            <span class="text-xl font-extrabold tracking-tight text-white light:text-slate-900 leading-none">
+              STREAM<span class="text-emerald-500">VIBE</span>
+            </span>
+            <span class="text-[10px] font-mono tracking-widest text-emerald-400 font-semibold uppercase mt-0.5">Ultra 4K IPTV</span>
+          </div>
+        </a>
+      </div>
+
+      <!-- Live Search Filter Field -->
+      <div class="flex-1 max-w-xl mx-2 sm:mx-6">
+        <div class="relative group">
+          <div class="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-slate-400 group-focus-within:text-emerald-400 transition-colors">
+            <i data-lucide="search" class="w-4 h-4"></i>
+          </div>
+          <input 
+            type="text" 
+            id="searchInput"
+            placeholder="Search 80,000+ movies, series, IPTV channels, actors..." 
+            class="w-full pl-10 pr-10 py-2 text-xs sm:text-sm rounded-xl bg-slate-900/90 light:bg-slate-100 border border-slate-800 light:border-slate-300 text-slate-100 light:text-slate-900 placeholder:text-slate-500 focus:outline-none focus:ring-2 focus:ring-emerald-500/50 focus:border-emerald-500 transition-all"
+            autocomplete="off"
+          />
+          <button id="clearSearchBtn" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-white">
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Actions Zone: Mode Switcher, Notifications, Trial CTA & Profile -->
+      <div class="flex items-center gap-2 sm:gap-3 shrink-0">
+        
+        <!-- Night / Light Mode Toggle Button -->
+        <button 
+          id="themeToggleBtn" 
+          onclick="toggleThemeMode()" 
+          title="Switch theme"
+          class="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-slate-800 light:border-slate-300 bg-slate-900/80 light:bg-white text-xs font-medium text-slate-300 light:text-slate-700 hover:text-white light:hover:text-black hover:border-slate-700 transition-colors"
+        >
+          <span id="themeIcon">
+            <i data-lucide="moon" class="w-4 h-4 text-emerald-400"></i>
+          </span>
+          <span id="themeText" class="hidden sm:inline">Night</span>
+        </button>
+
+        <!-- Notification Bell with Interactive Dropdown -->
+        <div class="relative">
+          <button 
+            id="notifBtn" 
+            onclick="toggleNotificationDropdown()"
+            class="relative p-2 rounded-lg border border-slate-800 light:border-slate-300 bg-slate-900/80 light:bg-white text-slate-300 light:text-slate-700 hover:text-white transition-colors"
+            title="Notifications"
+          >
+            <i data-lucide="bell" class="w-4 h-4"></i>
+            <span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-emerald-500 ring-2 ring-[#0b0b0e]"></span>
+          </button>
+
+          <!-- Notification Dropdown Menu -->
+          <div id="notifDropdown" class="hidden absolute right-0 mt-2 w-80 sm:w-96 rounded-2xl border border-slate-800 light:border-slate-200 bg-[#13131a] light:bg-white p-4 shadow-2xl z-50">
+            <div class="flex items-center justify-between pb-3 border-b border-slate-800 light:border-slate-100">
+              <span class="font-bold text-sm text-white light:text-slate-900">Notifications</span>
+              <button onclick="clearNotifications()" class="text-[11px] text-emerald-400 hover:underline">Mark all read</button>
+            </div>
+            <div class="divide-y divide-slate-800/50 light:divide-slate-100 max-h-64 overflow-y-auto mt-2">
+              <div class="py-2.5 flex gap-3 hover:bg-slate-800/40 rounded-lg p-2 transition-colors cursor-pointer" onclick="handleNotificationClick('Dune: Part Two')">
+                <div class="w-8 h-8 rounded-lg bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="film" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <p class="text-xs font-semibold text-slate-200 light:text-slate-800">Dune: Part Two (4K IMAX)</p>
+                  <p class="text-[11px] text-slate-400">Now streaming in Dolby Vision with Atmos audio.</p>
+                  <span class="text-[10px] text-slate-500 mt-1 block">5m ago</span>
+                </div>
+              </div>
+              <div class="py-2.5 flex gap-3 hover:bg-slate-800/40 rounded-lg p-2 transition-colors cursor-pointer" onclick="handleNotificationClick('UEFA Champions League')">
+                <div class="w-8 h-8 rounded-lg bg-blue-500/10 text-blue-400 flex items-center justify-center shrink-0">
+                  <i data-lucide="tv" class="w-4 h-4"></i>
+                </div>
+                <div>
+                  <p class="text-xs font-semibold text-slate-200 light:text-slate-800">Live Sports: UCL Match Day</p>
+                  <p class="text-[11px] text-slate-400">Stream in 60FPS on beIN Sports 1 & DAZN.</p>
+                  <span class="text-[10px] text-slate-500 mt-1 block">32m ago</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Start Free Trial Primary Button -->
+        <button 
+          onclick="handleDualClick('Free Trial VIP Access', 'start-trial')" 
+          class="hidden sm:inline-flex items-center gap-2 px-4 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-bold text-xs tracking-wide shadow-md shadow-emerald-500/20 active:scale-95 transition-all whitespace-nowrap"
+        >
+          <span>Start Free Trial</span>
+          <i data-lucide="arrow-right" class="w-3.5 h-3.5"></i>
+        </button>
+
+        <!-- User Profile Avatar -->
+        <div class="flex items-center gap-2 pl-1 border-l border-slate-800 light:border-slate-200">
+          <div class="w-8 h-8 rounded-full bg-gradient-to-br from-slate-700 to-slate-900 border border-emerald-500/40 flex items-center justify-center text-xs font-bold text-white shadow-sm overflow-hidden">
+            <span class="text-emerald-400">VIP</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </header>
+
+  <!-- ========================================================= -->
+  <!-- MAIN WORKSPACE LAYOUT (Left Sidebar | Dynamic Content | Right Sidebar) -->
+  <!-- ========================================================= -->
+  <div class="flex-1 flex max-w-[1720px] w-full mx-auto relative">
+
+    <!-- ------------------------------------------------------- -->
+    <!-- LEFT NAVIGATION SIDEBAR (State Management) -->
+    <!-- ------------------------------------------------------- -->
+    <aside id="sidebarNav" class="fixed lg:sticky top-18 z-30 w-64 h-[calc(100vh-4.5rem)] shrink-0 border-r border-slate-800/80 light:border-slate-200 bg-[#0e0e14] light:bg-white p-4 overflow-y-auto transform -translate-x-full lg:translate-x-0 transition-transform duration-200 ease-in-out flex flex-col justify-between">
+      
+      <div>
+        <div class="px-3 pb-3 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+          Menu
+        </div>
+
+        <nav class="space-y-1">
+          <button onclick="switchView('home')" id="nav-home" class="nav-item active w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors text-white light:text-slate-900 bg-slate-800/70 light:bg-slate-100">
+            <i data-lucide="home" class="w-4 h-4 text-emerald-400"></i>
+            <span>Home</span>
+          </button>
+          
+          <button onclick="switchView('watchlist')" id="nav-watchlist" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-colors text-slate-400 hover:text-white light:hover:text-slate-900 hover:bg-slate-800/40 light:hover:bg-slate-50">
+            <div class="flex items-center gap-3">
+              <i data-lucide="bookmark" class="w-4 h-4"></i>
+              <span>Watch List</span>
+            </div>
+            <span id="watchlistCountBadge" class="text-[11px] px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-mono">3</span>
+          </button>
+
+          <button onclick="switchView('coming-soon')" id="nav-coming-soon" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors text-slate-400 hover:text-white light:hover:text-slate-900 hover:bg-slate-800/40 light:hover:bg-slate-50">
+            <i data-lucide="calendar" class="w-4 h-4"></i>
+            <span>Coming Soon</span>
+          </button>
+
+          <button onclick="switchView('discovery')" id="nav-discovery" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors text-slate-400 hover:text-white light:hover:text-slate-900 hover:bg-slate-800/40 light:hover:bg-slate-50">
+            <i data-lucide="compass" class="w-4 h-4"></i>
+            <span>Discovery</span>
+          </button>
+        </nav>
+
+        <div class="mt-6 px-3 pb-3 text-[11px] font-bold tracking-wider text-slate-400 uppercase">
+          Social & Hub
+        </div>
+
+        <nav class="space-y-1">
+          <button onclick="switchView('friends')" id="nav-friends" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-sm font-medium transition-colors text-slate-400 hover:text-white light:hover:text-slate-900 hover:bg-slate-800/40 light:hover:bg-slate-50">
+            <div class="flex items-center gap-3">
+              <i data-lucide="users" class="w-4 h-4"></i>
+              <span>Friends</span>
+            </div>
+            <span class="w-2 h-2 rounded-full bg-emerald-500"></span>
+          </button>
+
+          <button onclick="switchView('parties')" id="nav-parties" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors text-slate-400 hover:text-white light:hover:text-slate-900 hover:bg-slate-800/40 light:hover:bg-slate-50">
+            <i data-lucide="radio" class="w-4 h-4 text-rose-500"></i>
+            <span>Parties</span>
+          </button>
+
+          <button onclick="switchView('media')" id="nav-media" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors text-slate-400 hover:text-white light:hover:text-slate-900 hover:bg-slate-800/40 light:hover:bg-slate-50">
+            <i data-lucide="hard-drive" class="w-4 h-4"></i>
+            <span>Media</span>
+          </button>
+
+          <button onclick="switchView('setting')" id="nav-setting" class="nav-item w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-medium transition-colors text-slate-400 hover:text-white light:hover:text-slate-900 hover:bg-slate-800/40 light:hover:bg-slate-50">
+            <i data-lucide="settings" class="w-4 h-4"></i>
+            <span>Setting</span>
+          </button>
+        </nav>
+      </div>
+
+      <!-- Left Sidebar Bottom Card: IPTV Server Status -->
+      <div class="p-3.5 rounded-2xl bg-slate-900/80 light:bg-slate-100 border border-slate-800 light:border-slate-200 mt-6">
+        <div class="flex items-center justify-between text-xs mb-1.5">
+          <span class="text-slate-400">Server Latency</span>
+          <span class="font-mono text-emerald-400 font-semibold">14 ms (99.9%)</span>
+        </div>
+        <div class="w-full bg-slate-800 light:bg-slate-300 h-1.5 rounded-full overflow-hidden">
+          <div class="bg-emerald-500 h-full w-[98%]"></div>
+        </div>
+        <p class="text-[10px] text-slate-500 mt-2 flex items-center gap-1.5">
+          <span class="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
+          Ultra 4K Stream Clusters Online
+        </p>
+      </div>
+
+    </aside>
+
+    <!-- ------------------------------------------------------- -->
+    <!-- DYNAMIC MAIN CONTENT VIEW AREA -->
+    <!-- ------------------------------------------------------- -->
+    <main id="mainContainer" class="flex-1 min-w-0 p-4 sm:p-6 lg:p-8 space-y-10">
+
+      <!-- ========================================== -->
+      <!-- VIEW 1: HOME (Dashboard & Showcase) -->
+      <!-- ========================================== -->
+      <div id="view-home" class="view-section active space-y-10">
+        
+        <!-- HERO STREAMING BANNER (IPTV & 4K CINEMA HERO) -->
+        <section class="relative rounded-3xl overflow-hidden border border-slate-800/80 light:border-slate-200 bg-gradient-to-r from-slate-950 via-[#101018] to-slate-900 p-6 sm:p-10 lg:p-12 shadow-2xl">
+          <!-- Background Ambient Glow & Grid -->
+          <div class="absolute -top-24 -right-24 w-96 h-96 bg-emerald-500/15 rounded-full blur-3xl pointer-events-none"></div>
+          <div class="absolute -bottom-24 -left-24 w-80 h-80 bg-blue-500/10 rounded-full blur-3xl pointer-events-none"></div>
+
+          <div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+            
+            <!-- Left Hero Content -->
+            <div class="lg:col-span-7 space-y-6">
+              <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-emerald-500/30 bg-emerald-500/10 text-emerald-400 text-xs font-semibold">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+                <span>Next-Gen IPTV & Streaming Technology</span>
+              </div>
+
+              <h1 class="text-3xl sm:text-5xl lg:text-6xl font-black text-white tracking-tight leading-[1.1] text-balance">
+                Stream Unlimited <br/>
+                <span class="text-transparent bg-clip-text bg-gradient-to-r from-emerald-400 via-green-400 to-teal-300">
+                  Movies, Series & Live TV
+                </span>
+              </h1>
+
+              <p class="text-slate-300 text-sm sm:text-base max-w-xl leading-relaxed">
+                Enjoy zero buffering, crystal-clear 4K Ultra HD resolution, and over 20,000 live sports and premium TV channels from any corner of the globe.
+              </p>
+
+              <!-- Hero CTAs (Dual Function Monitored) -->
+              <div class="flex flex-wrap items-center gap-4 pt-2">
+                <button 
+                  onclick="handleDualClick('Hero Start Free Trial', 'trial-hero')" 
+                  class="px-7 py-3.5 rounded-2xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-extrabold text-sm shadow-xl shadow-emerald-500/25 active:scale-95 transition-all flex items-center gap-2"
+                >
+                  <span>Start Free Trial</span>
+                  <i data-lucide="arrow-right" class="w-4 h-4"></i>
+                </button>
+                <button 
+                  onclick="scrollToSection('pricing-section')" 
+                  class="px-7 py-3.5 rounded-2xl bg-slate-900/90 hover:bg-slate-800 text-white font-semibold text-sm border border-slate-700 hover:border-slate-600 transition-all flex items-center gap-2"
+                >
+                  <i data-lucide="credit-card" class="w-4 h-4 text-emerald-400"></i>
+                  <span>View Plans</span>
+                </button>
+              </div>
+
+              <!-- Top KPI Stats Row (From Reference Image) -->
+              <div class="grid grid-cols-2 sm:grid-cols-5 gap-4 pt-6 border-t border-slate-800/80">
+                <div class="flex flex-col">
+                  <div class="flex items-center gap-1.5 text-emerald-400 mb-1">
+                    <i data-lucide="tv" class="w-4 h-4"></i>
+                    <span class="text-base sm:text-lg font-bold text-white font-mono">20,000+</span>
+                  </div>
+                  <span class="text-[11px] text-slate-400 font-medium">Live Channels</span>
+                </div>
+
+                <div class="flex flex-col">
+                  <div class="flex items-center gap-1.5 text-emerald-400 mb-1">
+                    <i data-lucide="clapperboard" class="w-4 h-4"></i>
+                    <span class="text-base sm:text-lg font-bold text-white font-mono">80,000+</span>
+                  </div>
+                  <span class="text-[11px] text-slate-400 font-medium">Movies & Series</span>
+                </div>
+
+                <div class="flex flex-col">
+                  <div class="flex items-center gap-1.5 text-emerald-400 mb-1">
+                    <i data-lucide="monitor" class="w-4 h-4"></i>
+                    <span class="text-base sm:text-lg font-bold text-white font-mono">4K UHD</span>
+                  </div>
+                  <span class="text-[11px] text-slate-400 font-medium">Ultra HD Quality</span>
+                </div>
+
+                <div class="flex flex-col">
+                  <div class="flex items-center gap-1.5 text-emerald-400 mb-1">
+                    <i data-lucide="shield-check" class="w-4 h-4"></i>
+                    <span class="text-base sm:text-lg font-bold text-white font-mono">99.9%</span>
+                  </div>
+                  <span class="text-[11px] text-slate-400 font-medium">Uptime Guarantee</span>
+                </div>
+
+                <div class="flex flex-col">
+                  <div class="flex items-center gap-1.5 text-emerald-400 mb-1">
+                    <i data-lucide="headphones" class="w-4 h-4"></i>
+                    <span class="text-base sm:text-lg font-bold text-white font-mono">24/7</span>
+                  </div>
+                  <span class="text-[11px] text-slate-400 font-medium">Customer Support</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- Right Hero Visual: IPTV Set-top Box & Sports Showcase (From Reference) -->
+            <div class="lg:col-span-5 relative flex justify-center">
+              <div class="relative w-full max-w-md rounded-2xl bg-slate-900/90 border border-slate-700/80 p-4 shadow-2xl overflow-hidden group">
+                <div class="relative aspect-video rounded-xl overflow-hidden bg-black flex items-center justify-center">
+                  <!-- Simulated 4K Sports Match Preview -->
+                  <img 
+                    src="https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=800&q=80" 
+                    alt="Live Football 4K Match" 
+                    class="w-full h-full object-cover opacity-85 group-hover:scale-105 transition-transform duration-500"
+                    referrerpolicy="no-referrer"
+                  />
+                  <div class="absolute inset-0 bg-gradient-to-t from-black via-black/30 to-transparent"></div>
+                  
+                  <div class="absolute top-3 left-3 flex items-center gap-2 px-2.5 py-1 rounded-md bg-red-600/90 text-white text-[11px] font-bold tracking-wider uppercase">
+                    <span class="w-2 h-2 rounded-full bg-white live-dot"></span>
+                    <span>LIVE 4K</span>
+                  </div>
+
+                  <div class="absolute top-3 right-3 px-2 py-0.5 rounded bg-black/60 backdrop-blur-md text-emerald-400 text-xs font-mono font-bold">
+                    60 FPS
+                  </div>
+
+                  <!-- Central Play Trigger (Dual-action) -->
+                  <button 
+                    onclick="openVideoModal('UEFA Champions League Final - 4K Ultra Live Stream', 'Sports & Live TV', '4K UHD', 'Live Now')"
+                    class="w-14 h-14 rounded-full bg-emerald-500/90 hover:bg-emerald-400 text-slate-950 flex items-center justify-center shadow-lg shadow-emerald-500/40 hover:scale-110 active:scale-95 transition-all z-10"
+                    title="Watch Live Stream"
+                  >
+                    <i data-lucide="play" class="w-6 h-6 fill-current ml-0.5"></i>
+                  </button>
+
+                  <div class="absolute bottom-3 left-3 right-3 flex items-center justify-between text-white text-xs">
+                    <span class="font-semibold">Real Madrid vs Manchester City</span>
+                    <span class="font-mono text-emerald-400">beIN Sports 4K</span>
+                  </div>
+                </div>
+
+                <div class="mt-3 flex items-center justify-between text-xs text-slate-400 pt-2 border-t border-slate-800">
+                  <span class="flex items-center gap-1.5">
+                    <i data-lucide="cpu" class="w-3.5 h-3.5 text-emerald-400"></i>
+                    Hardware Accelerated Decoder (IPTV Box & Smart TV)
+                  </span>
+                  <span class="font-mono text-emerald-400">Dolby Atmos</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- STREAMING BRAND LOGOS STRIP (From Reference Image) -->
+        <section class="rounded-2xl border border-slate-800/80 light:border-slate-200 bg-[#0e0e14] light:bg-white p-5">
+          <div class="flex flex-wrap items-center justify-around gap-6 sm:gap-10 text-slate-400 font-extrabold text-sm sm:text-base tracking-wider">
+            <span class="hover:text-red-600 transition-colors cursor-pointer text-lg tracking-widest font-black" onclick="showToast('Browsing Netflix 4K catalog')">NETFLIX</span>
+            <span class="hover:text-purple-500 transition-colors cursor-pointer text-lg font-black" onclick="showToast('Browsing beIN Sports catalog')">beIN <span class="text-xs font-medium text-slate-300">SPORTS</span></span>
+            <span class="hover:text-blue-400 transition-colors cursor-pointer text-lg font-black" onclick="showToast('Browsing Disney+ catalog')">Disney+</span>
+            <span class="hover:text-cyan-400 transition-colors cursor-pointer text-lg font-black" onclick="showToast('Browsing Prime Video catalog')">prime video</span>
+            <span class="hover:text-white transition-colors cursor-pointer text-lg font-black" onclick="showToast('Browsing HBO Max catalog')">HBO</span>
+            <span class="hover:text-yellow-400 transition-colors cursor-pointer text-lg font-black" onclick="showToast('Browsing DAZN catalog')">DAZN</span>
+            <span class="text-emerald-400 font-bold text-xs uppercase tracking-widest cursor-pointer hover:underline" onclick="switchView('discovery')">+ Many More</span>
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- POPULAR MOVIES & TV SHOWS (From Reference) -->
+        <!-- ========================================== -->
+        <section class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-white light:text-slate-900 tracking-tight">
+                Popular Movies & TV Shows
+              </h2>
+              <p class="text-xs text-slate-400 mt-0.5">Handpicked trending titles with 4K HDR master quality</p>
+            </div>
+            
+            <div class="flex items-center gap-2">
+              <button onclick="scrollMovieCarousel(-1)" class="w-8 h-8 rounded-full border border-slate-800 light:border-slate-300 bg-slate-900/80 light:bg-white text-slate-300 hover:text-white flex items-center justify-center transition-colors">
+                <i data-lucide="chevron-left" class="w-4 h-4"></i>
+              </button>
+              <button onclick="scrollMovieCarousel(1)" class="w-8 h-8 rounded-full border border-slate-800 light:border-slate-300 bg-slate-900/80 light:bg-white text-slate-300 hover:text-white flex items-center justify-center transition-colors">
+                <i data-lucide="chevron-right" class="w-4 h-4"></i>
+              </button>
+              <button onclick="switchView('discovery')" class="px-3 py-1.5 rounded-lg border border-emerald-500/30 text-emerald-400 hover:bg-emerald-500/10 text-xs font-semibold ml-2 transition-colors">
+                View All
+              </button>
+            </div>
+          </div>
+
+          <!-- Cards Carousel Container -->
+          <div id="popularCarousel" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 overflow-x-auto pb-2 scroll-smooth">
+            
+            <!-- Movie 1: Dune Part Two -->
+            <div class="movie-card group relative rounded-2xl overflow-hidden bg-[#13131a] light:bg-white border border-slate-800/80 light:border-slate-200 transition-all hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/10" data-title="Dune: Part Two" data-genre="Sci-Fi, Adventure" data-year="2024">
+              <div class="relative aspect-[2/3] overflow-hidden bg-slate-900 cursor-pointer" onclick="handleCardClick('Dune: Part Two', 'Sci-Fi, Adventure', '4K UHD', '2h 46m')">
+                <img 
+                  src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=600&q=80" 
+                  alt="Dune Part Two" 
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  referrerpolicy="no-referrer"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded bg-black/70 backdrop-blur-md text-[10px] font-mono font-bold text-emerald-400 border border-emerald-500/30">
+                  4K
+                </span>
+
+                <!-- Hover Play Icon -->
+                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div class="w-12 h-12 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center shadow-lg transform scale-75 group-hover:scale-100 transition-transform">
+                    <i data-lucide="play" class="w-5 h-5 fill-current ml-0.5"></i>
+                  </div>
+                </div>
+
+                <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                  <h3 class="text-sm font-bold text-white tracking-wide truncate">DUNE: PART TWO</h3>
+                  <div class="flex items-center gap-1.5 text-[11px] text-slate-300 mt-0.5">
+                    <span class="text-amber-400 font-bold">★ 8.8</span>
+                    <span>·</span>
+                    <span>2024</span>
+                    <span>·</span>
+                    <span class="truncate">Sci-Fi</span>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Action Bar (Dual click Watch & Watchlist) -->
+              <div class="p-2.5 flex items-center justify-between gap-2 bg-[#101018] light:bg-slate-50 border-t border-slate-800/80 light:border-slate-200">
+                <button 
+                  onclick="handleDualClick('Dune: Part Two', 'watch-card')" 
+                  class="flex-1 py-1.5 px-2.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-slate-950 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                  <span>Watch</span>
+                </button>
+                <button 
+                  onclick="addToWatchlist('Dune: Part Two', '2024', 'Sci-Fi')" 
+                  class="p-1.5 rounded-lg border border-slate-800 light:border-slate-300 text-slate-400 hover:text-emerald-400 hover:bg-slate-800 transition-colors"
+                  title="Add to Watchlist"
+                >
+                  <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Movie 2: Oppenheimer -->
+            <div class="movie-card group relative rounded-2xl overflow-hidden bg-[#13131a] light:bg-white border border-slate-800/80 light:border-slate-200 transition-all hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/10" data-title="Oppenheimer" data-genre="Biography, Drama" data-year="2023">
+              <div class="relative aspect-[2/3] overflow-hidden bg-slate-900 cursor-pointer" onclick="handleCardClick('Oppenheimer', 'Biography, Drama', '4K UHD', '3h 00m')">
+                <img 
+                  src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=600&q=80" 
+                  alt="Oppenheimer" 
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  referrerpolicy="no-referrer"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded bg-black/70 backdrop-blur-md text-[10px] font-mono font-bold text-emerald-400 border border-emerald-500/30">
+                  4K
+                </span>
+
+                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div class="w-12 h-12 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center shadow-lg transform scale-75 group-hover:scale-100 transition-transform">
+                    <i data-lucide="play" class="w-5 h-5 fill-current ml-0.5"></i>
+                  </div>
+                </div>
+
+                <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                  <h3 class="text-sm font-bold text-white tracking-wide truncate">OPPENHEIMER</h3>
+                  <div class="flex items-center gap-1.5 text-[11px] text-slate-300 mt-0.5">
+                    <span class="text-amber-400 font-bold">★ 8.9</span>
+                    <span>·</span>
+                    <span>2023</span>
+                    <span>·</span>
+                    <span class="truncate">Drama</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-2.5 flex items-center justify-between gap-2 bg-[#101018] light:bg-slate-50 border-t border-slate-800/80 light:border-slate-200">
+                <button 
+                  onclick="handleDualClick('Oppenheimer', 'watch-card')" 
+                  class="flex-1 py-1.5 px-2.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-slate-950 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                  <span>Watch</span>
+                </button>
+                <button 
+                  onclick="addToWatchlist('Oppenheimer', '2023', 'Biography, Drama')" 
+                  class="p-1.5 rounded-lg border border-slate-800 light:border-slate-300 text-slate-400 hover:text-emerald-400 hover:bg-slate-800 transition-colors"
+                  title="Add to Watchlist"
+                >
+                  <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Movie 3: The Last of Us -->
+            <div class="movie-card group relative rounded-2xl overflow-hidden bg-[#13131a] light:bg-white border border-slate-800/80 light:border-slate-200 transition-all hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/10" data-title="The Last of Us" data-genre="Drama, Thriller" data-year="2023">
+              <div class="relative aspect-[2/3] overflow-hidden bg-slate-900 cursor-pointer" onclick="handleCardClick('The Last of Us', 'Drama, Thriller', '4K UHD', 'Season 1')">
+                <img 
+                  src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80" 
+                  alt="The Last of Us" 
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  referrerpolicy="no-referrer"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded bg-black/70 backdrop-blur-md text-[10px] font-mono font-bold text-emerald-400 border border-emerald-500/30">
+                  HBO 4K
+                </span>
+
+                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div class="w-12 h-12 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center shadow-lg transform scale-75 group-hover:scale-100 transition-transform">
+                    <i data-lucide="play" class="w-5 h-5 fill-current ml-0.5"></i>
+                  </div>
+                </div>
+
+                <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                  <h3 class="text-sm font-bold text-white tracking-wide truncate">THE LAST OF US</h3>
+                  <div class="flex items-center gap-1.5 text-[11px] text-slate-300 mt-0.5">
+                    <span class="text-amber-400 font-bold">★ 8.8</span>
+                    <span>·</span>
+                    <span>2023</span>
+                    <span>·</span>
+                    <span class="truncate">Thriller</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-2.5 flex items-center justify-between gap-2 bg-[#101018] light:bg-slate-50 border-t border-slate-800/80 light:border-slate-200">
+                <button 
+                  onclick="handleDualClick('The Last of Us', 'watch-card')" 
+                  class="flex-1 py-1.5 px-2.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-slate-950 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                  <span>Watch</span>
+                </button>
+                <button 
+                  onclick="addToWatchlist('The Last of Us', '2023', 'Drama, Thriller')" 
+                  class="p-1.5 rounded-lg border border-slate-800 light:border-slate-300 text-slate-400 hover:text-emerald-400 hover:bg-slate-800 transition-colors"
+                  title="Add to Watchlist"
+                >
+                  <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Movie 4: Spider-Man: No Way Home -->
+            <div class="movie-card group relative rounded-2xl overflow-hidden bg-[#13131a] light:bg-white border border-slate-800/80 light:border-slate-200 transition-all hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/10" data-title="Spider-Man: No Way Home" data-genre="Action, Adventure" data-year="2021">
+              <div class="relative aspect-[2/3] overflow-hidden bg-slate-900 cursor-pointer" onclick="handleCardClick('Spider-Man: No Way Home', 'Action, Adventure', '4K UHD', '2h 28m')">
+                <img 
+                  src="https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=600&q=80" 
+                  alt="Spider-Man No Way Home" 
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  referrerpolicy="no-referrer"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded bg-black/70 backdrop-blur-md text-[10px] font-mono font-bold text-emerald-400 border border-emerald-500/30">
+                  4K
+                </span>
+
+                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div class="w-12 h-12 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center shadow-lg transform scale-75 group-hover:scale-100 transition-transform">
+                    <i data-lucide="play" class="w-5 h-5 fill-current ml-0.5"></i>
+                  </div>
+                </div>
+
+                <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                  <h3 class="text-sm font-bold text-white tracking-wide truncate">SPIDER-MAN: NO WAY HOME</h3>
+                  <div class="flex items-center gap-1.5 text-[11px] text-slate-300 mt-0.5">
+                    <span class="text-amber-400 font-bold">★ 8.2</span>
+                    <span>·</span>
+                    <span>2021</span>
+                    <span>·</span>
+                    <span class="truncate">Action</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-2.5 flex items-center justify-between gap-2 bg-[#101018] light:bg-slate-50 border-t border-slate-800/80 light:border-slate-200">
+                <button 
+                  onclick="handleDualClick('Spider-Man: No Way Home', 'watch-card')" 
+                  class="flex-1 py-1.5 px-2.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-slate-950 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                  <span>Watch</span>
+                </button>
+                <button 
+                  onclick="addToWatchlist('Spider-Man: No Way Home', '2021', 'Action, Adventure')" 
+                  class="p-1.5 rounded-lg border border-slate-800 light:border-slate-300 text-slate-400 hover:text-emerald-400 hover:bg-slate-800 transition-colors"
+                  title="Add to Watchlist"
+                >
+                  <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+            <!-- Movie 5: The Witcher Season 3 -->
+            <div class="movie-card group relative rounded-2xl overflow-hidden bg-[#13131a] light:bg-white border border-slate-800/80 light:border-slate-200 transition-all hover:border-emerald-500/50 hover:shadow-xl hover:shadow-emerald-500/10" data-title="The Witcher Season 3" data-genre="Fantasy, Drama" data-year="2023">
+              <div class="relative aspect-[2/3] overflow-hidden bg-slate-900 cursor-pointer" onclick="handleCardClick('The Witcher Season 3', 'Fantasy, Drama', '4K UHD', 'Season 3')">
+                <img 
+                  src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=600&q=80" 
+                  alt="The Witcher" 
+                  class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105"
+                  referrerpolicy="no-referrer"
+                />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/20 to-transparent"></div>
+                
+                <span class="absolute top-2.5 right-2.5 px-2 py-0.5 rounded bg-black/70 backdrop-blur-md text-[10px] font-mono font-bold text-emerald-400 border border-emerald-500/30">
+                  4K
+                </span>
+
+                <div class="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-opacity">
+                  <div class="w-12 h-12 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center shadow-lg transform scale-75 group-hover:scale-100 transition-transform">
+                    <i data-lucide="play" class="w-5 h-5 fill-current ml-0.5"></i>
+                  </div>
+                </div>
+
+                <div class="absolute bottom-2.5 left-2.5 right-2.5">
+                  <h3 class="text-sm font-bold text-white tracking-wide truncate">THE WITCHER</h3>
+                  <div class="flex items-center gap-1.5 text-[11px] text-slate-300 mt-0.5">
+                    <span class="text-amber-400 font-bold">★ 8.1</span>
+                    <span>·</span>
+                    <span>2023</span>
+                    <span>·</span>
+                    <span class="truncate">Fantasy</span>
+                  </div>
+                </div>
+              </div>
+
+              <div class="p-2.5 flex items-center justify-between gap-2 bg-[#101018] light:bg-slate-50 border-t border-slate-800/80 light:border-slate-200">
+                <button 
+                  onclick="handleDualClick('The Witcher Season 3', 'watch-card')" 
+                  class="flex-1 py-1.5 px-2.5 rounded-lg bg-emerald-500/10 hover:bg-emerald-500 text-emerald-400 hover:text-slate-950 font-semibold text-xs transition-colors flex items-center justify-center gap-1.5"
+                >
+                  <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+                  <span>Watch</span>
+                </button>
+                <button 
+                  onclick="addToWatchlist('The Witcher Season 3', '2023', 'Fantasy, Drama')" 
+                  class="p-1.5 rounded-lg border border-slate-800 light:border-slate-300 text-slate-400 hover:text-emerald-400 hover:bg-slate-800 transition-colors"
+                  title="Add to Watchlist"
+                >
+                  <i data-lucide="plus" class="w-4 h-4"></i>
+                </button>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ========================================== -->
+        <!-- NEW RELEASE SECTION -->
+        <!-- ========================================== -->
+        <section class="space-y-4">
+          <div class="flex items-center justify-between">
+            <div>
+              <h2 class="text-xl sm:text-2xl font-bold text-white light:text-slate-900 tracking-tight">
+                New Releases & Premiere Cinema
+              </h2>
+              <p class="text-xs text-slate-400 mt-0.5">Freshly added titles available for immediate streaming</p>
+            </div>
+            <button onclick="switchView('discovery')" class="text-xs font-semibold text-emerald-400 hover:underline">
+              See 200+ New Titles →
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
+            
+            <!-- New Release 1 -->
+            <div class="movie-card group rounded-2xl overflow-hidden bg-[#13131a] light:bg-white border border-slate-800/80 light:border-slate-200 hover:border-emerald-500/40 transition-all cursor-pointer" onclick="handleCardClick('Furiosa: A Mad Max Saga', 'Action, Sci-Fi', '4K UHD', '2h 28m')">
+              <div class="relative aspect-video overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=600&q=80" alt="Furiosa" class="w-full h-full object-cover group-hover:scale-105 transition-transform" referrerpolicy="no-referrer" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                <span class="absolute top-2 left-2 px-2 py-0.5 bg-emerald-500 text-slate-950 font-extrabold text-[10px] rounded">NEW</span>
+                <span class="absolute bottom-2 right-2 text-[10px] font-mono text-emerald-400 bg-black/60 px-1.5 py-0.5 rounded">4K HDR</span>
+              </div>
+              <div class="p-3">
+                <h4 class="text-xs font-bold text-white light:text-slate-900 truncate">Furiosa: A Mad Max Saga</h4>
+                <div class="flex items-center justify-between mt-1 text-[11px] text-slate-400">
+                  <span>Action · 2024</span>
+                  <span class="text-emerald-400 font-semibold">Play Now</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- New Release 2 -->
+            <div class="movie-card group rounded-2xl overflow-hidden bg-[#13131a] light:bg-white border border-slate-800/80 light:border-slate-200 hover:border-emerald-500/40 transition-all cursor-pointer" onclick="handleCardClick('Deadpool & Wolverine', 'Action, Comedy', '4K UHD', '2h 08m')">
+              <div class="relative aspect-video overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1563089145-599997674d42?auto=format&fit=crop&w=600&q=80" alt="Deadpool & Wolverine" class="w-full h-full object-cover group-hover:scale-105 transition-transform" referrerpolicy="no-referrer" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                <span class="absolute top-2 left-2 px-2 py-0.5 bg-emerald-500 text-slate-950 font-extrabold text-[10px] rounded">NEW</span>
+                <span class="absolute bottom-2 right-2 text-[10px] font-mono text-emerald-400 bg-black/60 px-1.5 py-0.5 rounded">4K HDR</span>
+              </div>
+              <div class="p-3">
+                <h4 class="text-xs font-bold text-white light:text-slate-900 truncate">Deadpool & Wolverine</h4>
+                <div class="flex items-center justify-between mt-1 text-[11px] text-slate-400">
+                  <span>Comedy · 2024</span>
+                  <span class="text-emerald-400 font-semibold">Play Now</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- New Release 3 -->
+            <div class="movie-card group rounded-2xl overflow-hidden bg-[#13131a] light:bg-white border border-slate-800/80 light:border-slate-200 hover:border-emerald-500/40 transition-all cursor-pointer" onclick="handleCardClick('Gladiator II', 'Action, Epic', '4K UHD', '2h 30m')">
+              <div class="relative aspect-video overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1578632767115-351597cf2477?auto=format&fit=crop&w=600&q=80" alt="Gladiator II" class="w-full h-full object-cover group-hover:scale-105 transition-transform" referrerpolicy="no-referrer" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                <span class="absolute top-2 left-2 px-2 py-0.5 bg-emerald-500 text-slate-950 font-extrabold text-[10px] rounded">NEW</span>
+                <span class="absolute bottom-2 right-2 text-[10px] font-mono text-emerald-400 bg-black/60 px-1.5 py-0.5 rounded">4K HDR</span>
+              </div>
+              <div class="p-3">
+                <h4 class="text-xs font-bold text-white light:text-slate-900 truncate">Gladiator II</h4>
+                <div class="flex items-center justify-between mt-1 text-[11px] text-slate-400">
+                  <span>Epic · 2024</span>
+                  <span class="text-emerald-400 font-semibold">Play Now</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- New Release 4 -->
+            <div class="movie-card group rounded-2xl overflow-hidden bg-[#13131a] light:bg-white border border-slate-800/80 light:border-slate-200 hover:border-emerald-500/40 transition-all cursor-pointer" onclick="handleCardClick('Alien: Romulus', 'Horror, Sci-Fi', '4K UHD', '1h 59m')">
+              <div class="relative aspect-video overflow-hidden">
+                <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=600&q=80" alt="Alien Romulus" class="w-full h-full object-cover group-hover:scale-105 transition-transform" referrerpolicy="no-referrer" />
+                <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent"></div>
+                <span class="absolute top-2 left-2 px-2 py-0.5 bg-emerald-500 text-slate-950 font-extrabold text-[10px] rounded">NEW</span>
+                <span class="absolute bottom-2 right-2 text-[10px] font-mono text-emerald-400 bg-black/60 px-1.5 py-0.5 rounded">4K HDR</span>
+              </div>
+              <div class="p-3">
+                <h4 class="text-xs font-bold text-white light:text-slate-900 truncate">Alien: Romulus</h4>
+                <div class="flex items-center justify-between mt-1 text-[11px] text-slate-400">
+                  <span>Horror · 2024</span>
+                  <span class="text-emerald-400 font-semibold">Play Now</span>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- [KONFIGURASI IKLAN: BANNER_HORIZONTAL DI BAWAH NEW RELEASE] -->
+        <!-- ========================================================= -->
+        <section id="ad-banner-horizontal" class="w-full">
+          <div class="relative w-full rounded-2xl border border-dashed border-emerald-500/40 bg-gradient-to-r from-slate-900/90 via-[#121820] to-slate-900/90 p-4 sm:p-6 text-center overflow-hidden group">
+            
+            <div class="absolute top-2 right-3 text-[10px] font-mono tracking-wider text-slate-500 uppercase flex items-center gap-1">
+              <span>Sponsor / Advertisement</span>
+              <i data-lucide="info" class="w-3 h-3"></i>
+            </div>
+
+            <!-- Banner Ad Content Slot -->
+            <div class="flex flex-col sm:flex-row items-center justify-between gap-4 max-w-4xl mx-auto my-2">
+              <div class="flex items-center gap-3 text-left">
+                <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/30">
+                  <i data-lucide="zap" class="w-6 h-6"></i>
+                </div>
+                <div>
+                  <h4 class="text-sm sm:text-base font-bold text-white light:text-slate-900">
+                    High-Speed Premium Streaming Server (10Gbps Dedicated Uplink)
+                  </h4>
+                  <p class="text-xs text-slate-400">
+                    Get instant 4K buffering bypass, zero throttling, and global anti-freeze protection.
+                  </p>
+                </div>
+              </div>
+
+              <!-- Dual-action click on Banner -->
+              <button 
+                onclick="handleDualClick('Banner Horizontal Ad Slot', 'banner-horizontal')" 
+                class="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs shadow-lg shadow-emerald-500/20 shrink-0 transition-transform active:scale-95"
+              >
+                Claim Offer Now
+              </button>
+            </div>
+
+            <!-- Ad Developer Slot Reference Placeholder -->
+            <div class="mt-2 pt-2 border-t border-slate-800 text-[10px] font-mono text-slate-500">
+              [Slot: BANNER_HORIZONTAL = "sesuai nanti" | Target: DIRECT_LINK]
+            </div>
+          </div>
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- PRICING SECTION: "Choose the Perfect Plan for You" (From Reference) -->
+        <!-- ========================================================= -->
+        <section id="pricing-section" class="pt-6 space-y-8">
+          
+          <div class="text-center max-w-2xl mx-auto space-y-3">
+            <span class="text-xs font-mono font-bold tracking-widest text-emerald-400 uppercase">
+              PRICING
+            </span>
+            <h2 class="text-2xl sm:text-4xl font-extrabold text-white light:text-slate-900 tracking-tight">
+              Choose the Perfect Plan for You
+            </h2>
+            <p class="text-sm text-slate-400 leading-relaxed">
+              Whether you're just starting or scaling up, we have a plan that fits your streaming needs.
+            </p>
+
+            <!-- Monthly / Annually Interactive Switcher (Save 20%) -->
+            <div class="inline-flex items-center p-1 rounded-full bg-slate-900 light:bg-slate-200 border border-slate-800 light:border-slate-300 mt-2">
+              <button 
+                id="billingMonthlyBtn" 
+                onclick="setBillingCycle('monthly')" 
+                class="px-4 py-1.5 rounded-full text-xs font-semibold bg-emerald-500 text-slate-950 shadow-sm transition-all"
+              >
+                Monthly
+              </button>
+              <button 
+                id="billingAnnuallyBtn" 
+                onclick="setBillingCycle('annually')" 
+                class="px-4 py-1.5 rounded-full text-xs font-semibold text-slate-400 light:text-slate-600 hover:text-white transition-all flex items-center gap-1.5"
+              >
+                <span>Annually</span>
+                <span class="text-[10px] font-bold text-emerald-400 bg-emerald-500/10 px-1.5 py-0.5 rounded-full">Save 20%</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Pricing Cards Grid: Basic, Pro (Most Popular), Team -->
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto items-stretch">
+            
+            <!-- Plan 1: Basic ($0) -->
+            <div class="flex flex-col justify-between rounded-3xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200 p-6 sm:p-8 hover:border-slate-700 transition-all">
+              <div class="space-y-4">
+                <div>
+                  <h3 class="text-lg font-bold text-white light:text-slate-900">Basic</h3>
+                  <p class="text-xs text-slate-400 mt-1">For individuals or teams looking to organize any project.</p>
+                </div>
+
+                <div class="pt-2">
+                  <div class="flex items-baseline gap-1">
+                    <span class="text-3xl sm:text-4xl font-extrabold text-white light:text-slate-900 font-mono">$0</span>
+                    <span class="text-xs text-slate-400">per month</span>
+                  </div>
+                </div>
+
+                <button 
+                  onclick="handleDualClick('Basic Free Plan Signup', 'signup-basic')" 
+                  class="w-full py-3 rounded-xl bg-slate-800 light:bg-slate-100 hover:bg-slate-700 text-white light:text-slate-900 font-bold text-xs transition-colors"
+                >
+                  Sign Up Now
+                </button>
+
+                <div class="pt-4 border-t border-slate-800/80 light:border-slate-100 space-y-2.5">
+                  <span class="text-xs font-semibold text-slate-300 light:text-slate-700 block">Free Plan Includes</span>
+                  <ul class="text-xs text-slate-400 space-y-2">
+                    <li class="flex items-center gap-2">
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                      <span>Up to 10 boards per workspace</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                      <span>Storage (5GB/file)</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                      <span>250 workspace command runs</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                      <span>Basic integrations with Top apps</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Plan 2: Pro ($10) - Most Popular with glowing emerald border -->
+            <div class="relative flex flex-col justify-between rounded-3xl bg-[#141822] light:bg-emerald-50/40 border-2 border-emerald-500 p-6 sm:p-8 shadow-2xl shadow-emerald-500/15 transform md:-translate-y-2">
+              
+              <!-- Tag: Most Popular -->
+              <div class="absolute -top-3.5 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-emerald-500 text-slate-950 font-extrabold text-[11px] tracking-wide shadow-md uppercase">
+                Most Popular
+              </div>
+
+              <div class="space-y-4">
+                <div>
+                  <h3 class="text-lg font-bold text-white light:text-slate-900">Pro</h3>
+                  <p class="text-xs text-slate-400 mt-1">Advanced tool for growing teams and serious streamers.</p>
+                </div>
+
+                <div class="pt-2">
+                  <div class="flex items-baseline gap-1">
+                    <span id="pricePro" class="text-3xl sm:text-4xl font-extrabold text-emerald-400 font-mono">$10</span>
+                    <span class="text-xs text-slate-400">per month</span>
+                  </div>
+                </div>
+
+                <button 
+                  onclick="handleDualClick('Pro VIP Subscription', 'signup-pro')" 
+                  class="w-full py-3 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-extrabold text-xs shadow-lg shadow-emerald-500/20 transition-all active:scale-95"
+                >
+                  Start Free Trial
+                </button>
+
+                <div class="pt-4 border-t border-slate-800/80 light:border-emerald-200 space-y-2.5">
+                  <span class="text-xs font-semibold text-slate-200 light:text-slate-800 block">All Free plan features, plus</span>
+                  <ul class="text-xs text-slate-300 light:text-slate-600 space-y-2">
+                    <li class="flex items-center gap-2">
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                      <span>Collaborate with up to 10 teammates</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                      <span>Custom workflows and templates</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                      <span>Advanced tracking & reports</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                      <span>Priority integrations (4K IPTV Stream)</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                      <span>Email support</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+            <!-- Plan 3: Team ($49) -->
+            <div class="flex flex-col justify-between rounded-3xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200 p-6 sm:p-8 hover:border-slate-700 transition-all">
+              <div class="space-y-4">
+                <div>
+                  <h3 class="text-lg font-bold text-white light:text-slate-900">Team</h3>
+                  <p class="text-xs text-slate-400 mt-1">Complete collaboration for larger teams and commercial venues.</p>
+                </div>
+
+                <div class="pt-2">
+                  <div class="flex items-baseline gap-1">
+                    <span id="priceTeam" class="text-3xl sm:text-4xl font-extrabold text-white light:text-slate-900 font-mono">$49</span>
+                    <span class="text-xs text-slate-400">per month</span>
+                  </div>
+                </div>
+
+                <button 
+                  onclick="handleDualClick('Team Plan Free Trial', 'signup-team')" 
+                  class="w-full py-3 rounded-xl bg-slate-800 light:bg-slate-100 hover:bg-slate-700 text-white light:text-slate-900 font-bold text-xs transition-colors"
+                >
+                  Start Free Trial
+                </button>
+
+                <div class="pt-4 border-t border-slate-800/80 light:border-slate-100 space-y-2.5">
+                  <span class="text-xs font-semibold text-slate-300 light:text-slate-700 block">All Pro plan features, plus</span>
+                  <ul class="text-xs text-slate-400 space-y-2">
+                    <li class="flex items-center gap-2">
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                      <span>Up to 25 teammates simultaneous devices</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                      <span>Unlimited workflows & automations</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                      <span>Real-time analytics dashboard</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                      <span>Premium integrations</span>
+                    </li>
+                    <li class="flex items-center gap-2">
+                      <i data-lucide="check-circle-2" class="w-4 h-4 text-emerald-400 shrink-0"></i>
+                      <span>Priority 24/7 dedicated support</span>
+                    </li>
+                  </ul>
+                </div>
+              </div>
+            </div>
+
+          </div>
+
+        </section>
+
+        <!-- ========================================================= -->
+        <!-- VALUE PROPOSITION ROW (From Reference: Devices, Uptime, Instant, 24/7) -->
+        <!-- ========================================================= -->
+        <section class="rounded-3xl border border-slate-800/80 light:border-slate-200 bg-[#101018] light:bg-white p-6 sm:p-8">
+          <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/20">
+                <i data-lucide="monitor-smartphone" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-white light:text-slate-900">Works on Any Device</h4>
+                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                  Smart TV, Android, iOS, MAG Box, Enigma2, Firestick & more.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/20">
+                <i data-lucide="shield-check" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-white light:text-slate-900">99.9% Uptime</h4>
+                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                  Our servers are optimized for the best streaming with zero freezing.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/20">
+                <i data-lucide="rocket" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-white light:text-slate-900">Instant Activation</h4>
+                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                  Get started in seconds and enjoy instantly with credentials sent right away.
+                </p>
+              </div>
+            </div>
+
+            <div class="flex items-start gap-4">
+              <div class="w-12 h-12 rounded-2xl bg-emerald-500/10 text-emerald-400 flex items-center justify-center shrink-0 border border-emerald-500/20">
+                <i data-lucide="headphones" class="w-6 h-6"></i>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-white light:text-slate-900">24/7 Support</h4>
+                <p class="text-xs text-slate-400 mt-1 leading-relaxed">
+                  We are here to help you anytime you need us through live chat or tickets.
+                </p>
+              </div>
+            </div>
+
+          </div>
+        </section>
+
+        <!-- WHAT OUR USERS SAY TESTIMONIALS (From Reference) -->
+        <section class="space-y-6 pt-4">
+          <div class="text-center max-w-xl mx-auto">
+            <h2 class="text-2xl sm:text-3xl font-extrabold text-white light:text-slate-900">
+              What Our <span class="text-emerald-400">Users</span> Say
+            </h2>
+            <p class="text-xs text-slate-400 mt-1">Real ratings from thousands of daily active global subscribers</p>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div class="p-6 rounded-2xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200 space-y-3">
+              <div class="flex items-center gap-1 text-amber-400 text-xs">
+                ★★★★★
+              </div>
+              <p class="text-xs text-slate-300 light:text-slate-600 leading-relaxed italic">
+                "The 4K resolution on live sports without a single hitch during the Champions League final is unbelievable. Switched from satellite to StreamVibe and never looked back."
+              </p>
+              <div class="flex items-center gap-3 pt-2 border-t border-slate-800 light:border-slate-100">
+                <div class="w-8 h-8 rounded-full bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-xs">
+                  MK
+                </div>
+                <div>
+                  <h5 class="text-xs font-bold text-white light:text-slate-900">Marcus Keller</h5>
+                  <span class="text-[10px] text-slate-400">Pro Subscriber · London, UK</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200 space-y-3">
+              <div class="flex items-center gap-1 text-amber-400 text-xs">
+                ★★★★★
+              </div>
+              <p class="text-xs text-slate-300 light:text-slate-600 leading-relaxed italic">
+                "Instant setup on my Apple TV and Firestick. The video on demand library has every cinema release I've wanted to watch in crisp Dolby Audio."
+              </p>
+              <div class="flex items-center gap-3 pt-2 border-t border-slate-800 light:border-slate-100">
+                <div class="w-8 h-8 rounded-full bg-blue-500/20 text-blue-400 font-bold flex items-center justify-center text-xs">
+                  SL
+                </div>
+                <div>
+                  <h5 class="text-xs font-bold text-white light:text-slate-900">Sofia Laurent</h5>
+                  <span class="text-[10px] text-slate-400">Team Subscriber · Paris, France</span>
+                </div>
+              </div>
+            </div>
+
+            <div class="p-6 rounded-2xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200 space-y-3">
+              <div class="flex items-center gap-1 text-amber-400 text-xs">
+                ★★★★★
+              </div>
+              <p class="text-xs text-slate-300 light:text-slate-600 leading-relaxed italic">
+                "Customer support responded in less than 2 minutes when I needed advice setting up my MAG box playlist. Truly corporate-grade streaming service."
+              </p>
+              <div class="flex items-center gap-3 pt-2 border-t border-slate-800 light:border-slate-100">
+                <div class="w-8 h-8 rounded-full bg-purple-500/20 text-purple-400 font-bold flex items-center justify-center text-xs">
+                  DR
+                </div>
+                <div>
+                  <h5 class="text-xs font-bold text-white light:text-slate-900">David Reynolds</h5>
+                  <span class="text-[10px] text-slate-400">Pro Subscriber · New York, USA</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- ========================================== -->
+      <!-- VIEW 2: WATCH LIST -->
+      <!-- ========================================== -->
+      <div id="view-watchlist" class="view-section space-y-6">
+        <div class="flex items-center justify-between pb-4 border-b border-slate-800/80 light:border-slate-200">
+          <div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white light:text-slate-900">My Watch List</h1>
+            <p class="text-xs text-slate-400 mt-1">Your saved movies, series, and live sports bookmarks</p>
+          </div>
+          <button onclick="clearWatchlist()" class="px-3 py-1.5 rounded-lg border border-red-500/30 text-red-400 hover:bg-red-500/10 text-xs font-medium transition-colors">
+            Clear List
+          </button>
+        </div>
+
+        <div id="watchlistGrid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+          <!-- Populated dynamically via JavaScript -->
+        </div>
+
+        <div id="watchlistEmptyState" class="hidden text-center py-16 space-y-4">
+          <div class="w-16 h-16 rounded-2xl bg-slate-800/60 text-slate-400 flex items-center justify-center mx-auto">
+            <i data-lucide="bookmark" class="w-8 h-8"></i>
+          </div>
+          <h3 class="text-base font-bold text-white light:text-slate-900">Your Watchlist is Empty</h3>
+          <p class="text-xs text-slate-400 max-w-sm mx-auto">
+            Browse our popular movies and click the plus (+) button to add titles here for easy access.
+          </p>
+          <button onclick="switchView('home')" class="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs">
+            Browse Trending Movies
+          </button>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- VIEW 3: COMING SOON -->
+      <!-- ========================================== -->
+      <div id="view-coming-soon" class="view-section space-y-6">
+        <div class="pb-4 border-b border-slate-800/80 light:border-slate-200">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-white light:text-slate-900">Coming Soon & Upcoming Premieres</h1>
+          <p class="text-xs text-slate-400 mt-1">Direct from world cinema festivals to your screen</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div class="rounded-2xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200 p-5 flex gap-4">
+            <img src="https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=300&q=80" alt="Upcoming" class="w-28 h-36 rounded-xl object-cover shrink-0" referrerpolicy="no-referrer" />
+            <div class="flex-1 flex flex-col justify-between">
+              <div>
+                <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded font-bold">RELEASING IN 4 DAYS</span>
+                <h3 class="text-base font-bold text-white light:text-slate-900 mt-1.5">Avatar: Fire and Ash (4K HDR)</h3>
+                <p class="text-xs text-slate-400 mt-1">James Cameron returns to Pandora with deep volcanic tribes and cutting-edge visual effects.</p>
+              </div>
+              <div class="flex items-center justify-between pt-2">
+                <span class="text-xs text-slate-400">Premiere: Oct 25, 2026</span>
+                <button onclick="remindMovie('Avatar: Fire and Ash')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold flex items-center gap-1.5">
+                  <i data-lucide="bell" class="w-3.5 h-3.5 text-emerald-400"></i>
+                  <span>Remind Me</span>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200 p-5 flex gap-4">
+            <img src="https://images.unsplash.com/photo-1478760329108-5c3ed9d495a0?auto=format&fit=crop&w=300&q=80" alt="Upcoming" class="w-28 h-36 rounded-xl object-cover shrink-0" referrerpolicy="no-referrer" />
+            <div class="flex-1 flex flex-col justify-between">
+              <div>
+                <span class="text-[10px] font-mono text-emerald-400 bg-emerald-500/10 px-2 py-0.5 rounded font-bold">RELEASING IN 12 DAYS</span>
+                <h3 class="text-base font-bold text-white light:text-slate-900 mt-1.5">Interstellar: 10th Anniversary IMAX Re-Cut</h3>
+                <p class="text-xs text-slate-400 mt-1">Christopher Nolan's space epic remastered with expanded aspect ratio and uncompressed audio.</p>
+              </div>
+              <div class="flex items-center justify-between pt-2">
+                <span class="text-xs text-slate-400">Premiere: Nov 02, 2026</span>
+                <button onclick="remindMovie('Interstellar IMAX Re-Cut')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold flex items-center gap-1.5">
+                  <i data-lucide="bell" class="w-3.5 h-3.5 text-emerald-400"></i>
+                  <span>Remind Me</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- VIEW 4: DISCOVERY (Categories & Filter) -->
+      <!-- ========================================== -->
+      <div id="view-discovery" class="view-section space-y-6">
+        <div class="pb-4 border-b border-slate-800/80 light:border-slate-200">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-white light:text-slate-900">Discovery & Global Channels</h1>
+          <p class="text-xs text-slate-400 mt-1">Explore 80,000+ titles by category, region, and stream quality</p>
+        </div>
+
+        <!-- Filter Tabs -->
+        <div class="flex flex-wrap gap-2">
+          <button onclick="filterDiscovery('all')" class="discovery-filter-btn px-4 py-2 rounded-xl text-xs font-bold bg-emerald-500 text-slate-950">All Content</button>
+          <button onclick="filterDiscovery('live')" class="discovery-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white">Live IPTV Channels</button>
+          <button onclick="filterDiscovery('movies')" class="discovery-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white">Cinema Movies</button>
+          <button onclick="filterDiscovery('sports')" class="discovery-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white">Sports 60FPS</button>
+          <button onclick="filterDiscovery('series')" class="discovery-filter-btn px-4 py-2 rounded-xl text-xs font-semibold bg-slate-800 text-slate-300 hover:text-white">TV Series</button>
+        </div>
+
+        <div id="discoveryGrid" class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+          <!-- Dynamically populated or rendered -->
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- VIEW 5: FRIENDS (Social & Watch Activity) -->
+      <!-- ========================================== -->
+      <div id="view-friends" class="view-section space-y-6">
+        <div class="pb-4 border-b border-slate-800/80 light:border-slate-200 flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white light:text-slate-900">Friends & Social Activity</h1>
+            <p class="text-xs text-slate-400 mt-1">See what your friends are streaming right now</p>
+          </div>
+          <button onclick="showToast('Friend invite link copied to clipboard!')" class="px-3.5 py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs flex items-center gap-1.5">
+            <i data-lucide="user-plus" class="w-4 h-4"></i>
+            <span>Invite Friend</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-4 rounded-2xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="relative">
+                <div class="w-10 h-10 rounded-full bg-emerald-500/20 text-emerald-400 font-bold flex items-center justify-center text-sm">AL</div>
+                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-slate-900"></span>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-white light:text-slate-900">Alex Lindemann</h4>
+                <p class="text-xs text-slate-400">Watching <span class="text-emerald-400 font-medium">Dune: Part Two</span> (45m in)</p>
+              </div>
+            </div>
+            <button onclick="handleDualClick('Join Alex Watch Party', 'join-party')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold">
+              Join Watch
+            </button>
+          </div>
+
+          <div class="p-4 rounded-2xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200 flex items-center justify-between">
+            <div class="flex items-center gap-3">
+              <div class="relative">
+                <div class="w-10 h-10 rounded-full bg-blue-500/20 text-blue-400 font-bold flex items-center justify-center text-sm">EL</div>
+                <span class="absolute bottom-0 right-0 w-2.5 h-2.5 rounded-full bg-emerald-500 ring-2 ring-slate-900"></span>
+              </div>
+              <div>
+                <h4 class="text-sm font-bold text-white light:text-slate-900">Elena Rostova</h4>
+                <p class="text-xs text-slate-400">Watching <span class="text-blue-400 font-medium">UCL Live: PSG vs Bayern</span></p>
+              </div>
+            </div>
+            <button onclick="handleDualClick('Join Elena Watch Party', 'join-party')" class="px-3 py-1.5 rounded-lg bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold">
+              Join Watch
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- VIEW 6: PARTIES (Sync Rooms) -->
+      <!-- ========================================== -->
+      <div id="view-parties" class="view-section space-y-6">
+        <div class="pb-4 border-b border-slate-800/80 light:border-slate-200 flex items-center justify-between">
+          <div>
+            <h1 class="text-2xl sm:text-3xl font-extrabold text-white light:text-slate-900">Live Watch Parties</h1>
+            <p class="text-xs text-slate-400 mt-1">Synchronized group streaming with real-time audio & chat</p>
+          </div>
+          <button onclick="createWatchParty()" class="px-4 py-2 rounded-xl bg-gradient-to-r from-red-500 to-rose-600 text-white font-bold text-xs flex items-center gap-2">
+            <i data-lucide="radio" class="w-4 h-4"></i>
+            <span>Create New Room</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="p-5 rounded-2xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200 space-y-3">
+            <div class="flex items-center justify-between">
+              <span class="px-2.5 py-0.5 rounded-full bg-rose-500/10 text-rose-400 text-xs font-bold flex items-center gap-1.5">
+                <span class="w-2 h-2 rounded-full bg-rose-500 animate-pulse"></span>
+                LIVE ROOM #104
+              </span>
+              <span class="text-xs font-mono text-slate-400">12 viewers connected</span>
+            </div>
+            <h3 class="text-base font-bold text-white light:text-slate-900">Premier League Super Sunday Watchalong</h3>
+            <p class="text-xs text-slate-400">Host: @StreamMaster_UK · Ultra 4K 60FPS sync stream with open voice room.</p>
+            <div class="pt-2 flex items-center justify-between">
+              <span class="text-[11px] text-emerald-400">Direct Link Synced</span>
+              <button onclick="handleDualClick('Join Premier League Party', 'join-party')" class="px-4 py-2 rounded-xl bg-emerald-500 text-slate-950 font-bold text-xs">
+                Enter Room
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- VIEW 7: MEDIA (Local & Cloud Library) -->
+      <!-- ========================================== -->
+      <div id="view-media" class="view-section space-y-6">
+        <div class="pb-4 border-b border-slate-800/80 light:border-slate-200">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-white light:text-slate-900">Media Server & Downloads</h1>
+          <p class="text-xs text-slate-400 mt-1">Manage offline downloads, DVR recordings, and cloud storage</p>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
+          <div class="p-5 rounded-2xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200">
+            <span class="text-xs text-slate-400">Downloaded Offline</span>
+            <h3 class="text-2xl font-bold font-mono text-white light:text-slate-900 mt-1">14 Movies</h3>
+            <p class="text-[11px] text-emerald-400 mt-1">42.5 GB / 250 GB used</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200">
+            <span class="text-xs text-slate-400">Cloud DVR Schedules</span>
+            <h3 class="text-2xl font-bold font-mono text-white light:text-slate-900 mt-1">5 Upcoming</h3>
+            <p class="text-[11px] text-slate-400 mt-1">Auto-records favorite teams</p>
+          </div>
+          <div class="p-5 rounded-2xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200">
+            <span class="text-xs text-slate-400">Hardware Transcoding</span>
+            <h3 class="text-2xl font-bold font-mono text-emerald-400 mt-1">Active (HEVC)</h3>
+            <p class="text-[11px] text-slate-400 mt-1">Direct-play 4K HDR enabled</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- ========================================== -->
+      <!-- VIEW 8: SETTING (Stream & Account Config) -->
+      <!-- ========================================== -->
+      <div id="view-setting" class="view-section space-y-6 max-w-4xl">
+        <div class="pb-4 border-b border-slate-800/80 light:border-slate-200">
+          <h1 class="text-2xl sm:text-3xl font-extrabold text-white light:text-slate-900">Streaming Preferences & Settings</h1>
+          <p class="text-xs text-slate-400 mt-1">Configure playback resolution, audio codecs, and monetization options</p>
+        </div>
+
+        <div class="space-y-4">
+          <div class="p-5 rounded-2xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200 flex items-center justify-between">
+            <div>
+              <h4 class="text-sm font-bold text-white light:text-slate-900">Default Streaming Quality</h4>
+              <p class="text-xs text-slate-400">Prioritize bandwidth or maximum visual fidelity</p>
+            </div>
+            <select class="px-3 py-1.5 rounded-xl bg-slate-900 light:bg-slate-100 border border-slate-800 text-xs font-semibold text-white light:text-slate-900 focus:outline-none focus:ring-2 focus:ring-emerald-500">
+              <option selected>4K Ultra HD (Dolby Vision)</option>
+              <option>1080p Full HD (High Bitrate)</option>
+              <option>720p HD (Data Saver)</option>
+            </select>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200 flex items-center justify-between">
+            <div>
+              <h4 class="text-sm font-bold text-white light:text-slate-900">Direct Link Monetization</h4>
+              <p class="text-xs text-slate-400 font-mono text-[11px] truncate max-w-md">https://auctionr.org/4/642bd65c14e506e62c3c33cdf83a4833</p>
+            </div>
+            <span class="px-2.5 py-1 rounded-full bg-emerald-500/10 text-emerald-400 font-bold text-[11px]">ACTIVE</span>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200 flex items-center justify-between">
+            <div>
+              <h4 class="text-sm font-bold text-white light:text-slate-900">Audio Passthrough</h4>
+              <p class="text-xs text-slate-400">Bitstream Dolby Atmos & DTS:X to external AVR receiver</p>
+            </div>
+            <input type="checkbox" checked class="w-4 h-4 accent-emerald-500" />
+          </div>
+        </div>
+      </div>
+
+    </main>
+
+    <!-- ------------------------------------------------------- -->
+    <!-- RIGHT SIDEBAR (Popular Movies, BANNER_KOTAK, Favorites) -->
+    <!-- ------------------------------------------------------- -->
+    <aside class="hidden xl:block w-80 shrink-0 border-l border-slate-800/80 light:border-slate-200 bg-[#0e0e14] light:bg-white p-4 space-y-6 overflow-y-auto h-[calc(100vh-4.5rem)] sticky top-18">
+      
+      <!-- 1. POPULAR MOVIES SECTION (MINI SIDEBAR LIST) -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Popular Movies</h3>
+          <span class="text-[10px] text-emerald-400 font-semibold cursor-pointer" onclick="switchView('discovery')">More</span>
+        </div>
+
+        <div class="space-y-2.5">
+          
+          <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-900/60 light:bg-slate-50 border border-slate-800/50 hover:border-emerald-500/40 transition-colors cursor-pointer group" onclick="handleCardClick('Dune: Part Two', 'Sci-Fi', '4K', '2h 46m')">
+            <img src="https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=120&q=80" alt="Dune" class="w-12 h-14 rounded-lg object-cover shrink-0" referrerpolicy="no-referrer" />
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-bold text-white light:text-slate-900 truncate group-hover:text-emerald-400 transition-colors">Dune: Part Two</h4>
+              <p class="text-[11px] text-slate-400 truncate">Sci-Fi · 4K UHD</p>
+              <div class="flex items-center gap-1 text-[10px] text-amber-400 font-bold mt-0.5">
+                <span>★ 8.8</span>
+                <span class="text-slate-500">·</span>
+                <span class="text-emerald-400">Trending #1</span>
+              </div>
+            </div>
+            <button class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-400">
+              <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+            </button>
+          </div>
+
+          <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-900/60 light:bg-slate-50 border border-slate-800/50 hover:border-emerald-500/40 transition-colors cursor-pointer group" onclick="handleCardClick('Oppenheimer', 'Drama', '4K', '3h 00m')">
+            <img src="https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=120&q=80" alt="Oppenheimer" class="w-12 h-14 rounded-lg object-cover shrink-0" referrerpolicy="no-referrer" />
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-bold text-white light:text-slate-900 truncate group-hover:text-emerald-400 transition-colors">Oppenheimer</h4>
+              <p class="text-[11px] text-slate-400 truncate">Biography · 4K IMAX</p>
+              <div class="flex items-center gap-1 text-[10px] text-amber-400 font-bold mt-0.5">
+                <span>★ 8.9</span>
+                <span class="text-slate-500">·</span>
+                <span class="text-emerald-400">Trending #2</span>
+              </div>
+            </div>
+            <button class="p-1.5 rounded-lg text-slate-400 hover:text-emerald-400">
+              <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- ========================================================= -->
+      <!-- [KONFIGURASI IKLAN: BANNER_KOTAK PERSIS DI ANTARA POPULAR & FAVORITES] -->
+      <!-- ========================================================= -->
+      <div id="ad-banner-kotak" class="w-full">
+        <div class="relative w-full rounded-2xl border border-dashed border-emerald-500/40 bg-gradient-to-b from-slate-900 via-[#131722] to-slate-900 p-4 text-center overflow-hidden group">
+          
+          <div class="flex items-center justify-between text-[10px] font-mono text-slate-500 uppercase pb-2 border-b border-slate-800">
+            <span>Sponsor Ad</span>
+            <span>300x250 Medium Rect</span>
+          </div>
+
+          <div class="py-4 space-y-2">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center mx-auto border border-emerald-500/30">
+              <i data-lucide="sparkles" class="w-5 h-5"></i>
+            </div>
+            <h4 class="text-xs font-bold text-white light:text-slate-900">
+              Ultra IPTV VIP Server 2026
+            </h4>
+            <p class="text-[11px] text-slate-400 leading-snug">
+              Unlock 20,000+ live premium sports feeds with anti-buffering CDN.
+            </p>
+
+            <!-- Dual-action click on BANNER_KOTAK -->
+            <button 
+              onclick="handleDualClick('Sidebar Kotak Ad Slot', 'banner-kotak')" 
+              class="w-full mt-2 py-2 rounded-xl bg-gradient-to-r from-emerald-500 to-green-600 hover:from-emerald-400 hover:to-green-500 text-slate-950 font-bold text-xs shadow-md transition-all active:scale-95"
+            >
+              Get Instant Access
+            </button>
+          </div>
+
+          <!-- Ad Slot Placeholder Info -->
+          <div class="pt-2 border-t border-slate-800 text-[9px] font-mono text-slate-500">
+            [Slot: BANNER_KOTAK = "sesuai nantai" | DIRECT_LINK]
+          </div>
+        </div>
+      </div>
+
+      <!-- 2. FAVORITES SECTION -->
+      <div class="space-y-3">
+        <div class="flex items-center justify-between">
+          <h3 class="text-xs font-bold text-slate-400 uppercase tracking-wider">Favorites</h3>
+          <span class="text-[10px] text-emerald-400 font-semibold cursor-pointer" onclick="switchView('watchlist')">View All</span>
+        </div>
+
+        <div class="space-y-2.5">
+          
+          <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-900/60 light:bg-slate-50 border border-slate-800/50 hover:border-emerald-500/40 transition-colors cursor-pointer group" onclick="handleCardClick('Spider-Man: No Way Home', 'Action', '4K', '2h 28m')">
+            <img src="https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=120&q=80" alt="Spider-Man" class="w-12 h-14 rounded-lg object-cover shrink-0" referrerpolicy="no-referrer" />
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-bold text-white light:text-slate-900 truncate group-hover:text-emerald-400 transition-colors">Spider-Man: No Way Home</h4>
+              <p class="text-[11px] text-slate-400 truncate">Action, Marvel · 4K</p>
+              <span class="text-[10px] text-emerald-400 font-medium">Favorited</span>
+            </div>
+            <button class="p-1.5 rounded-lg text-rose-500">
+              <i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i>
+            </button>
+          </div>
+
+          <div class="flex items-center gap-3 p-2 rounded-xl bg-slate-900/60 light:bg-slate-50 border border-slate-800/50 hover:border-emerald-500/40 transition-colors cursor-pointer group" onclick="handleCardClick('The Witcher Season 3', 'Fantasy', '4K', 'Season 3')">
+            <img src="https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=120&q=80" alt="The Witcher" class="w-12 h-14 rounded-lg object-cover shrink-0" referrerpolicy="no-referrer" />
+            <div class="flex-1 min-w-0">
+              <h4 class="text-xs font-bold text-white light:text-slate-900 truncate group-hover:text-emerald-400 transition-colors">The Witcher</h4>
+              <p class="text-[11px] text-slate-400 truncate">Fantasy · S3 Complete</p>
+              <span class="text-[10px] text-emerald-400 font-medium">Favorited</span>
+            </div>
+            <button class="p-1.5 rounded-lg text-rose-500">
+              <i data-lucide="heart" class="w-3.5 h-3.5 fill-current"></i>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </aside>
+
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- VIDEO PLAYER MODAL (Popup Video Player with Controls) -->
+  <!-- ========================================================= -->
+  <div id="videoModal" class="fixed inset-0 z-50 hidden bg-black/85 backdrop-blur-xl flex items-center justify-center p-3 sm:p-6 transition-all">
+    <div class="relative w-full max-w-5xl rounded-3xl bg-[#0e0e14] border border-slate-800 shadow-2xl overflow-hidden flex flex-col">
+      
+      <!-- Modal Header -->
+      <div class="px-5 py-3.5 border-b border-slate-800 flex items-center justify-between bg-slate-950/60">
+        <div class="flex items-center gap-3">
+          <div class="w-3 h-3 rounded-full bg-red-500 live-dot"></div>
+          <div>
+            <h3 id="modalMovieTitle" class="text-sm sm:text-base font-bold text-white truncate max-w-xs sm:max-w-md">
+              Dune: Part Two
+            </h3>
+            <p id="modalMovieMeta" class="text-[11px] text-slate-400">
+              4K Ultra HD · Dolby Vision · 5.1 Surround
+            </p>
+          </div>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <span class="hidden sm:inline-block px-2 py-0.5 rounded bg-emerald-500/10 text-emerald-400 text-xs font-mono font-bold">
+            STREAMING ACTIVE
+          </span>
+          <!-- Close Button 'X' -->
+          <button 
+            onclick="closeVideoModal()" 
+            class="w-8 h-8 rounded-full bg-slate-800/80 hover:bg-slate-700 text-slate-300 hover:text-white flex items-center justify-center transition-colors"
+            title="Close Player"
+          >
+            <i data-lucide="x" class="w-4 h-4"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Player Canvas & Screen Simulation -->
+      <div class="relative aspect-video w-full bg-black flex items-center justify-center overflow-hidden group">
+        
+        <!-- Video Screen Backdrop & Canvas Simulation -->
+        <canvas id="videoCanvas" class="w-full h-full object-cover"></canvas>
+        <div id="videoPosterOverlay" class="absolute inset-0 bg-cover bg-center flex items-center justify-center">
+          <div class="text-center space-y-2 p-4 bg-black/50 backdrop-blur-sm rounded-2xl max-w-sm">
+            <div class="w-12 h-12 rounded-full bg-emerald-500 text-slate-950 flex items-center justify-center mx-auto shadow-lg">
+              <i data-lucide="play" class="w-5 h-5 fill-current ml-0.5"></i>
+            </div>
+            <p class="text-xs text-white font-semibold">Simulated Ultra HD Master Stream</p>
+            <p class="text-[11px] text-slate-300">Click Play or spacebar to control playback</p>
+          </div>
+        </div>
+
+        <!-- Watermark / Stream Quality Pill -->
+        <div class="absolute top-4 left-4 flex items-center gap-2 px-3 py-1 rounded-lg bg-black/70 backdrop-blur-md text-[11px] font-mono text-emerald-400 border border-emerald-500/20">
+          <span class="w-2 h-2 rounded-full bg-emerald-400"></span>
+          <span>4K UHD 60FPS · Bitrate: 48.2 Mbps</span>
+        </div>
+
+        <!-- Center Big Play/Pause Button on Hover -->
+        <button 
+          id="centerPlayBtn" 
+          onclick="togglePlaySimulation()" 
+          class="absolute w-16 h-16 rounded-full bg-emerald-500/90 hover:bg-emerald-400 text-slate-950 flex items-center justify-center shadow-xl shadow-emerald-500/30 hover:scale-110 active:scale-95 transition-all"
+        >
+          <i data-lucide="play" id="centerPlayIcon" class="w-7 h-7 fill-current ml-1"></i>
+        </button>
+
+        <!-- Player Controls Bar -->
+        <div class="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black via-black/80 to-transparent p-4 space-y-2 opacity-95 group-hover:opacity-100 transition-opacity">
+          
+          <!-- Scrubber Timeline -->
+          <div class="relative w-full h-2 bg-slate-700/60 rounded-full cursor-pointer overflow-hidden" id="timelineBar" onclick="seekVideo(event)">
+            <div id="timelineProgress" class="h-full bg-gradient-to-r from-emerald-500 to-green-400 w-1/3 rounded-full relative">
+              <div class="absolute right-0 top-1/2 -translate-y-1/2 w-3 h-3 rounded-full bg-white shadow-sm"></div>
+            </div>
+          </div>
+
+          <!-- Bottom Control Buttons -->
+          <div class="flex items-center justify-between text-white text-xs pt-1">
+            <div class="flex items-center gap-3">
+              <button onclick="togglePlaySimulation()" class="hover:text-emerald-400 transition-colors">
+                <i data-lucide="play" id="playBtnIcon" class="w-4 h-4 fill-current"></i>
+              </button>
+              <button onclick="rewindVideo(10)" class="hover:text-emerald-400 transition-colors" title="Rewind 10s">
+                <i data-lucide="rotate-ccw" class="w-4 h-4"></i>
+              </button>
+              <button onclick="forwardVideo(10)" class="hover:text-emerald-400 transition-colors" title="Forward 10s">
+                <i data-lucide="rotate-cw" class="w-4 h-4"></i>
+              </button>
+              
+              <!-- Time Counter -->
+              <span id="playerTimeDisplay" class="font-mono text-slate-300 text-[11px]">01:24 / 02:46:12</span>
+            </div>
+
+            <div class="flex items-center gap-3">
+              <!-- Audio Volume Slider -->
+              <div class="flex items-center gap-1.5">
+                <i data-lucide="volume-2" class="w-4 h-4 text-slate-300"></i>
+                <input type="range" min="0" max="100" value="80" class="w-16 h-1 accent-emerald-500" />
+              </div>
+              <span class="px-1.5 py-0.5 rounded bg-slate-800 text-[10px] font-mono text-emerald-400">4K UHD</span>
+              <button onclick="toggleFullscreen()" class="hover:text-emerald-400 transition-colors" title="Fullscreen">
+                <i data-lucide="maximize" class="w-4 h-4"></i>
+              </button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Modal Footer (Monetization & Action Bar) -->
+      <div class="p-4 bg-slate-950 flex flex-wrap items-center justify-between gap-3 text-xs border-t border-slate-800">
+        <div class="flex items-center gap-2 text-slate-400">
+          <i data-lucide="shield-check" class="w-4 h-4 text-emerald-400"></i>
+          <span>Verified High-Speed Stream Server · Zero Buffering Guarantee</span>
+        </div>
+        
+        <div class="flex items-center gap-2">
+          <button onclick="handleDualClick('Watch in Full 4K HDR App', 'player-app-stream')" class="px-4 py-2 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold transition-transform active:scale-95 flex items-center gap-1.5">
+            <i data-lucide="external-link" class="w-3.5 h-3.5"></i>
+            <span>Unlock Direct Full 4K Stream</span>
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- TOAST NOTIFICATION CONTAINER -->
+  <!-- ========================================================= -->
+  <div id="toastContainer" class="fixed bottom-6 right-6 z-50 space-y-2 pointer-events-none"></div>
+
+  <!-- ========================================================= -->
+  <!-- CORPORATE STREAMING FOOTER -->
+  <!-- ========================================================= -->
+  <footer class="mt-auto border-t border-slate-800/80 light:border-slate-200 bg-[#08080b] light:bg-slate-100 py-8 px-4 sm:px-6 lg:px-8 text-xs text-slate-500">
+    <div class="max-w-[1720px] mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+      <div class="flex items-center gap-2">
+        <div class="w-6 h-6 rounded-lg bg-emerald-500 text-slate-950 flex items-center justify-center font-black text-xs">S</div>
+        <span class="font-bold text-white light:text-slate-900">StreamVibe Corporate IPTV</span>
+        <span>© 2026 StreamVibe Global Inc. All rights reserved.</span>
+      </div>
+
+      <div class="flex flex-wrap items-center gap-4 text-slate-400">
+        <a href="#" onclick="showToast('Terms of Service loaded'); return false;" class="hover:text-emerald-400">Terms of Service</a>
+        <span>·</span>
+        <a href="#" onclick="showToast('Privacy Policy loaded'); return false;" class="hover:text-emerald-400">Privacy Policy</a>
+        <span>·</span>
+        <a href="#" onclick="showToast('IPTV Server Status: 100% Operational'); return false;" class="hover:text-emerald-400">Server Health</a>
+        <span>·</span>
+        <a href="#" onclick="handleDualClick('Footer Affiliate', 'footer-link'); return false;" class="text-emerald-400 font-semibold hover:underline">Affiliate Portal</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- ========================================================= -->
+  <!-- JAVASCRIPT LOGIC (100% Zero-Config & Pure Interactive Script) -->
+  <!-- ========================================================= -->
+  <script>
+    // =========================================================
+    // [KONFIGURASI IKLAN & MONETISASI - WAJIB DITERAPKAN]
+    // =========================================================
+    const DIRECT_LINK = "https://asiafilm.org/4/f3861333fb000b4bfb23e9e47cd02ef6";
+    const BANNER_KOTAK = "https://asiafilm.org/4/f3861333fb000b4bfb23e9e47cd02ef6";
+    const BANNER_HORIZONTAL = "https://asiafilm.org/4/f3861333fb000b4bfb23e9e47cd02ef6";
+
+    // Application State
+    let currentView = 'home';
+    let isDarkMode = true;
+    let isPlaying = false;
+    let playbackSeconds = 84;
+    let playbackInterval = null;
+    let billingCycle = 'monthly';
+    
+    // User Watchlist Store (Local state with preloaded items)
+    let userWatchlist = [
+      { id: '1', title: 'Dune: Part Two', year: '2024', genre: 'Sci-Fi, Adventure', rating: '8.8', quality: '4K UHD' },
+      { id: '2', title: 'Oppenheimer', year: '2023', genre: 'Biography, Drama', rating: '8.9', quality: '4K UHD' },
+      { id: '3', title: 'The Last of Us', year: '2023', genre: 'Drama, Thriller', rating: '8.8', quality: 'HBO 4K' }
+    ];
+
+    // Discovery Catalog Data for dynamic browsing
+    const discoveryCatalog = [
+      { id: '101', title: 'Dune: Part Two', category: 'movies', genre: 'Sci-Fi', year: '2024', rating: '8.8', quality: '4K UHD', img: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?auto=format&fit=crop&w=400&q=80' },
+      { id: '102', title: 'Sky Sports F1 HD', category: 'sports', genre: 'Formula 1 Live', year: '2026', rating: '9.4', quality: '60 FPS', img: 'https://images.unsplash.com/photo-1568605117036-5fe5e7bab0b7?auto=format&fit=crop&w=400&q=80' },
+      { id: '103', title: 'Oppenheimer', category: 'movies', genre: 'Drama', year: '2023', rating: '8.9', quality: '4K UHD', img: 'https://images.unsplash.com/photo-1579546929518-9e396f3cc809?auto=format&fit=crop&w=400&q=80' },
+      { id: '104', title: 'beIN Sports 1 English', category: 'live', genre: 'Live Football IPTV', year: '2026', rating: '9.8', quality: '4K 60FPS', img: 'https://images.unsplash.com/photo-1508098682722-e99c43a406b2?auto=format&fit=crop&w=400&q=80' },
+      { id: '105', title: 'The Last of Us', category: 'series', genre: 'Thriller', year: '2023', rating: '8.8', quality: '4K UHD', img: 'https://images.unsplash.com/photo-1518709268805-4e9042af9f23?auto=format&fit=crop&w=400&q=80' },
+      { id: '106', title: 'Spider-Man: No Way Home', category: 'movies', genre: 'Action', year: '2021', rating: '8.2', quality: '4K UHD', img: 'https://images.unsplash.com/photo-1635805737707-575885ab0820?auto=format&fit=crop&w=400&q=80' },
+      { id: '107', title: 'The Witcher Season 3', category: 'series', genre: 'Fantasy', year: '2023', rating: '8.1', quality: '4K UHD', img: 'https://images.unsplash.com/photo-1514565131-fce0801e5785?auto=format&fit=crop&w=400&q=80' },
+      { id: '108', title: 'NBA Finals 4K Feed', category: 'sports', genre: 'Basketball Live', year: '2026', rating: '9.5', quality: '4K HDR', img: 'https://images.unsplash.com/photo-1546519638-68e109498ffc?auto=format&fit=crop&w=400&q=80' },
+      { id: '109', title: 'HBO Max Cinema Premiere', category: 'live', genre: 'IPTV 24/7 Channel', year: '2026', rating: '9.1', quality: 'FHD', img: 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=400&q=80' },
+      { id: '110', title: 'Stranger Things', category: 'series', genre: 'Sci-Fi Mystery', year: '2025', rating: '8.7', quality: '4K Atmos', img: 'https://images.unsplash.com/photo-1509198397868-475647b2a1e5?auto=format&fit=crop&w=400&q=80' }
+    ];
+
+    // =========================================================
+    // DUAL ACTION HANDLER (ATURAN IKLAN #1)
+    // Semua tombol "Watch", "Play", dan kartu film membuka modal DAN tab DIRECT_LINK
+    // =========================================================
+    function handleDualClick(title, context) {
+      console.log(`[Dual-Action Triggered] Context: ${context} | Title: ${title}`);
+      
+      // 1. Open the Direct Link in a new tab as mandated
+      try {
+        window.open(DIRECT_LINK, '_blank');
+      } catch (e) {
+        console.warn('Popup blocked, opening fallback window:', e);
+      }
+
+      // 2. Open the video player modal for seamless user experience
+      openVideoModal(title || 'Ultra HD Streaming Preview', 'Cinema Master 4K', '4K UHD', 'Streaming Live');
+    }
+
+    function handleCardClick(title, genre, quality, duration) {
+      // Open Direct Link in background tab + launch modal
+      try {
+        window.open(DIRECT_LINK, '_blank');
+      } catch (e) {
+        console.warn('Window open error:', e);
+      }
+      openVideoModal(title, genre, quality, duration);
+    }
+
+    // =========================================================
+    // 1. SIDEBAR MENU & STATE MANAGEMENT
+    // Merubah tampilan Konten Utama secara dinamis
+    // =========================================================
+    function switchView(viewName) {
+      currentView = viewName;
+
+      // Update Nav buttons state
+      document.querySelectorAll('.nav-item').forEach(el => {
+        el.classList.remove('active', 'text-white', 'light:text-slate-900', 'bg-slate-800/70', 'light:bg-slate-100');
+        el.classList.add('text-slate-400');
+      });
+
+      const activeBtn = document.getElementById(`nav-${viewName}`);
+      if (activeBtn) {
+        activeBtn.classList.add('active', 'text-white', 'light:text-slate-900', 'bg-slate-800/70', 'light:bg-slate-100');
+        activeBtn.classList.remove('text-slate-400');
+      }
+
+      // Hide all view sections, show requested one
+      document.querySelectorAll('.view-section').forEach(sec => {
+        sec.classList.remove('active');
+      });
+
+      const targetSec = document.getElementById(`view-${viewName}`);
+      if (targetSec) {
+        targetSec.classList.add('active');
+      }
+
+      // Close mobile sidebar if open
+      const sidebar = document.getElementById('sidebarNav');
+      if (sidebar && window.innerWidth < 1024) {
+        sidebar.classList.add('-translate-x-full');
+      }
+
+      // View-specific initializers
+      if (viewName === 'watchlist') {
+        renderWatchlist();
+      } else if (viewName === 'discovery') {
+        renderDiscovery(discoveryCatalog);
+      }
+
+      // Scroll to top of content
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+      showToast(`Switched to ${viewName.toUpperCase()} section`);
+    }
+
+    // Mobile Sidebar Drawer Toggle
+    document.getElementById('mobileMenuToggle')?.addEventListener('click', () => {
+      const sidebar = document.getElementById('sidebarNav');
+      sidebar.classList.toggle('-translate-x-full');
+    });
+
+    // =========================================================
+    // 2. PEMUTAR VIDEO MODAL (POPUP VIDEO PLAYER)
+    // =========================================================
+    function openVideoModal(title, genre, quality, duration) {
+      const modal = document.getElementById('videoModal');
+      document.getElementById('modalMovieTitle').textContent = title;
+      document.getElementById('modalMovieMeta').textContent = `${quality || '4K UHD'} · ${genre || 'Action'} · Duration: ${duration || '2h 15m'}`;
+      
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      
+      // Start simulated video canvas
+      startSimulatedVideo();
+      showToast(`Playing "${title}" in Ultra 4K`);
+    }
+
+    function closeVideoModal() {
+      const modal = document.getElementById('videoModal');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      stopSimulatedVideo();
+    }
+
+    // Close on escape key
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeVideoModal();
+      if (e.code === 'Space' && !document.getElementById('videoModal').classList.contains('hidden')) {
+        e.preventDefault();
+        togglePlaySimulation();
+      }
+    });
+
+    // Simulated Video Rendering via Canvas
+    let animFrame = null;
+    function startSimulatedVideo() {
+      isPlaying = true;
+      document.getElementById('videoPosterOverlay').classList.add('hidden');
+      updatePlayIcons(true);
+
+      const canvas = document.getElementById('videoCanvas');
+      const ctx = canvas.getContext('2d');
+      canvas.width = 960;
+      canvas.height = 540;
+
+      let tick = 0;
+      function drawFrame() {
+        tick++;
+        // Render sleek dynamic motion graphics simulating cinematic trailer
+        const grad = ctx.createLinearGradient(0, 0, canvas.width, canvas.height);
+        grad.addColorStop(0, '#090a10');
+        grad.addColorStop(0.5, '#131926');
+        grad.addColorStop(1, '#0b0f14');
+        ctx.fillStyle = grad;
+        ctx.fillRect(0, 0, canvas.width, canvas.height);
+
+        // Ambient cinematic particles
+        for (let i = 0; i < 15; i++) {
+          const x = (Math.sin(tick * 0.02 + i) * 0.5 + 0.5) * canvas.width;
+          const y = (Math.cos(tick * 0.015 + i * 2) * 0.5 + 0.5) * canvas.height;
+          const r = Math.sin(tick * 0.05 + i) * 15 + 25;
+          ctx.beginPath();
+          ctx.arc(x, y, r, 0, Math.PI * 2);
+          ctx.fillStyle = i % 2 === 0 ? 'rgba(34, 197, 94, 0.15)' : 'rgba(56, 189, 248, 0.12)';
+          ctx.fill();
+        }
+
+        // Animated audio waveform
+        ctx.strokeStyle = '#22c55e';
+        ctx.lineWidth = 2;
+        ctx.beginPath();
+        for (let x = 0; x < canvas.width; x += 10) {
+          const y = canvas.height / 2 + Math.sin(x * 0.03 + tick * 0.1) * 35;
+          if (x === 0) ctx.moveTo(x, y);
+          else ctx.lineTo(x, y);
+        }
+        ctx.stroke();
+
+        // Title watermark in canvas
+        ctx.font = 'bold 24px "Plus Jakarta Sans", sans-serif';
+        ctx.fillStyle = 'rgba(255, 255, 255, 0.4)';
+        ctx.textAlign = 'center';
+        ctx.fillText("STREAMVIBE 4K CINEMA STREAMING MASTER", canvas.width / 2, canvas.height / 2 + 100);
+
+        if (isPlaying) {
+          animFrame = requestAnimationFrame(drawFrame);
+        }
+      }
+
+      drawFrame();
+
+      // Timer progression
+      clearInterval(playbackInterval);
+      playbackInterval = setInterval(() => {
+        playbackSeconds++;
+        updateTimeDisplay();
+      }, 1000);
+    }
+
+    function stopSimulatedVideo() {
+      isPlaying = false;
+      cancelAnimationFrame(animFrame);
+      clearInterval(playbackInterval);
+      updatePlayIcons(false);
+    }
+
+    function togglePlaySimulation() {
+      if (isPlaying) {
+        stopSimulatedVideo();
+        showToast('Playback paused');
+      } else {
+        startSimulatedVideo();
+        showToast('Playback resumed');
+      }
+    }
+
+    function updatePlayIcons(playing) {
+      const centerIcon = document.getElementById('centerPlayIcon');
+      const bottomIcon = document.getElementById('playBtnIcon');
+      const centerBtn = document.getElementById('centerPlayBtn');
+
+      if (playing) {
+        centerBtn.classList.add('opacity-0', 'pointer-events-none');
+        if (bottomIcon) bottomIcon.setAttribute('data-lucide', 'pause');
+      } else {
+        centerBtn.classList.remove('opacity-0', 'pointer-events-none');
+        if (bottomIcon) bottomIcon.setAttribute('data-lucide', 'play');
+      }
+      lucide.createIcons();
+    }
+
+    function updateTimeDisplay() {
+      const min = Math.floor(playbackSeconds / 60);
+      const sec = playbackSeconds % 60;
+      const formatted = `${String(min).padStart(2, '0')}:${String(sec).padStart(2, '0')}`;
+      const timeElem = document.getElementById('playerTimeDisplay');
+      if (timeElem) timeElem.textContent = `${formatted} / 02:46:12`;
+
+      // Progress bar percentage (assuming 166 min)
+      const totalSec = 166 * 60;
+      const pct = Math.min(100, (playbackSeconds / totalSec) * 100);
+      const prog = document.getElementById('timelineProgress');
+      if (prog) prog.style.width = `${Math.max(5, pct)}%`;
+    }
+
+    function rewindVideo(sec) {
+      playbackSeconds = Math.max(0, playbackSeconds - sec);
+      updateTimeDisplay();
+      showToast(`Rewound ${sec} seconds`);
+    }
+
+    function forwardVideo(sec) {
+      playbackSeconds += sec;
+      updateTimeDisplay();
+      showToast(`Forwarded ${sec} seconds`);
+    }
+
+    function seekVideo(e) {
+      const rect = e.currentTarget.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const fraction = clickX / rect.width;
+      playbackSeconds = Math.floor(fraction * (166 * 60));
+      updateTimeDisplay();
+    }
+
+    function toggleFullscreen() {
+      const elem = document.getElementById('videoModal');
+      if (!document.fullscreenElement) {
+        elem.requestFullscreen().catch(() => {});
+      } else {
+        document.exitFullscreen().catch(() => {});
+      }
+    }
+
+    // =========================================================
+    // 3. LIVE SEARCH FILTER
+    // Menyaring daftar film secara live saat pengguna mengetik
+    // =========================================================
+    const searchInput = document.getElementById('searchInput');
+    const clearSearchBtn = document.getElementById('clearSearchBtn');
+
+    searchInput.addEventListener('input', (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      
+      if (query.length > 0) {
+        clearSearchBtn.classList.remove('hidden');
+      } else {
+        clearSearchBtn.classList.add('hidden');
+      }
+
+      // Filter all movie cards across DOM
+      const movieCards = document.querySelectorAll('.movie-card');
+      let matchCount = 0;
+
+      movieCards.forEach(card => {
+        const title = (card.getAttribute('data-title') || card.querySelector('h3, h4')?.textContent || '').toLowerCase();
+        const genre = (card.getAttribute('data-genre') || '').toLowerCase();
+        const year = (card.getAttribute('data-year') || '').toLowerCase();
+
+        if (title.includes(query) || genre.includes(query) || year.includes(query)) {
+          card.style.display = '';
+          matchCount++;
+        } else {
+          card.style.display = 'none';
+        }
+      });
+
+      // If user is in discovery view, filter catalog too
+      if (currentView === 'discovery') {
+        const filtered = discoveryCatalog.filter(item => 
+          item.title.toLowerCase().includes(query) || 
+          item.genre.toLowerCase().includes(query) ||
+          item.category.toLowerCase().includes(query)
+        );
+        renderDiscovery(filtered);
+      }
+    });
+
+    clearSearchBtn.addEventListener('click', () => {
+      searchInput.value = '';
+      clearSearchBtn.classList.add('hidden');
+      document.querySelectorAll('.movie-card').forEach(card => card.style.display = '');
+      if (currentView === 'discovery') renderDiscovery(discoveryCatalog);
+      showToast('Search cleared');
+    });
+
+    // =========================================================
+    // 4. NIGHT & LIGHT MODE TOGGLE
+    // Berpindah mulus antara Dark Mode (#0b0b0e) dan Light Mode (#f8fafc)
+    // =========================================================
+    function toggleThemeMode() {
+      isDarkMode = !isDarkMode;
+      const html = document.documentElement;
+      const iconSpan = document.getElementById('themeIcon');
+      const textSpan = document.getElementById('themeText');
+
+      if (isDarkMode) {
+        html.classList.add('dark');
+        html.classList.remove('light');
+        iconSpan.innerHTML = '<i data-lucide="moon" class="w-4 h-4 text-emerald-400"></i>';
+        textSpan.textContent = 'Night';
+        showToast('Switched to Dark Mode (#0b0b0e)');
+      } else {
+        html.classList.remove('dark');
+        html.classList.add('light');
+        iconSpan.innerHTML = '<i data-lucide="sun" class="w-4 h-4 text-amber-500"></i>';
+        textSpan.textContent = 'Light';
+        showToast('Switched to Light Mode (#f8fafc)');
+      }
+
+      lucide.createIcons();
+    }
+
+    // =========================================================
+    // 5. NOTIFICATION DROPDOWN & ACTIONS
+    // =========================================================
+    function toggleNotificationDropdown() {
+      const drop = document.getElementById('notifDropdown');
+      drop.classList.toggle('hidden');
+    }
+
+    // Close notification dropdown when clicked outside
+    window.addEventListener('click', (e) => {
+      const btn = document.getElementById('notifBtn');
+      const drop = document.getElementById('notifDropdown');
+      if (btn && drop && !btn.contains(e.target) && !drop.contains(e.target)) {
+        drop.classList.add('hidden');
+      }
+    });
+
+    function handleNotificationClick(itemTitle) {
+      document.getElementById('notifDropdown').classList.add('hidden');
+      handleDualClick(itemTitle, 'notification-click');
+    }
+
+    function clearNotifications() {
+      document.getElementById('notifDropdown').classList.add('hidden');
+      showToast('All notifications marked as read');
+    }
+
+    // =========================================================
+    // WATCHLIST MANAGEMENT (Add, Render, Clear)
+    // =========================================================
+    function addToWatchlist(title, year, genre) {
+      const exists = userWatchlist.some(item => item.title.toLowerCase() === title.toLowerCase());
+      if (exists) {
+        showToast(`"${title}" is already in your Watch List!`);
+        return;
+      }
+
+      userWatchlist.unshift({
+        id: Date.now().toString(),
+        title,
+        year: year || '2024',
+        genre: genre || 'Feature Film',
+        rating: '8.5',
+        quality: '4K UHD'
+      });
+
+      updateWatchlistBadge();
+      showToast(`Added "${title}" to your Watch List!`);
+    }
+
+    function removeFromWatchlist(id) {
+      userWatchlist = userWatchlist.filter(item => item.id !== id);
+      updateWatchlistBadge();
+      renderWatchlist();
+      showToast('Removed from Watchlist');
+    }
+
+    function clearWatchlist() {
+      userWatchlist = [];
+      updateWatchlistBadge();
+      renderWatchlist();
+      showToast('Watchlist cleared');
+    }
+
+    function updateWatchlistBadge() {
+      const badge = document.getElementById('watchlistCountBadge');
+      if (badge) badge.textContent = userWatchlist.length;
+    }
+
+    function renderWatchlist() {
+      const grid = document.getElementById('watchlistGrid');
+      const empty = document.getElementById('watchlistEmptyState');
+
+      if (!grid) return;
+
+      if (userWatchlist.length === 0) {
+        grid.innerHTML = '';
+        empty.classList.remove('hidden');
+        return;
+      }
+
+      empty.classList.add('hidden');
+      grid.innerHTML = userWatchlist.map(item => `
+        <div class="rounded-2xl overflow-hidden bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200 p-3 flex flex-col justify-between space-y-3">
+          <div class="flex items-start gap-3">
+            <div class="w-16 h-20 rounded-xl bg-slate-800 overflow-hidden shrink-0 flex items-center justify-center text-emerald-400 font-bold text-xs">
+              <i data-lucide="film" class="w-6 h-6"></i>
+            </div>
+            <div class="min-w-0 flex-1">
+              <span class="text-[10px] font-mono text-emerald-400 font-bold">${item.quality}</span>
+              <h4 class="text-sm font-bold text-white light:text-slate-900 truncate mt-0.5">${item.title}</h4>
+              <p class="text-xs text-slate-400">${item.year} · ${item.genre}</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 pt-2 border-t border-slate-800/60 light:border-slate-100">
+            <button onclick="handleDualClick('${item.title}', 'watchlist-play')" class="flex-1 py-1.5 rounded-lg bg-emerald-500 hover:bg-emerald-400 text-slate-950 font-bold text-xs flex items-center justify-center gap-1">
+              <i data-lucide="play" class="w-3.5 h-3.5 fill-current"></i>
+              <span>Watch</span>
+            </button>
+            <button onclick="removeFromWatchlist('${item.id}')" class="p-1.5 rounded-lg text-slate-400 hover:text-red-400 transition-colors" title="Remove">
+              <i data-lucide="trash-2" class="w-4 h-4"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    // =========================================================
+    // DISCOVERY RENDERING & CATEGORY FILTERING
+    // =========================================================
+    function filterDiscovery(category) {
+      document.querySelectorAll('.discovery-filter-btn').forEach(btn => {
+        btn.classList.remove('bg-emerald-500', 'text-slate-950');
+        btn.classList.add('bg-slate-800', 'text-slate-300');
+      });
+      event.currentTarget.classList.add('bg-emerald-500', 'text-slate-950');
+      event.currentTarget.classList.remove('bg-slate-800', 'text-slate-300');
+
+      if (category === 'all') {
+        renderDiscovery(discoveryCatalog);
+      } else {
+        const filtered = discoveryCatalog.filter(item => item.category === category);
+        renderDiscovery(filtered);
+      }
+    }
+
+    function renderDiscovery(items) {
+      const container = document.getElementById('discoveryGrid');
+      if (!container) return;
+
+      container.innerHTML = items.map(item => `
+        <div class="movie-card group rounded-2xl overflow-hidden bg-[#13131a] light:bg-white border border-slate-800 light:border-slate-200 transition-all hover:border-emerald-500/50" data-title="${item.title}" data-genre="${item.genre}">
+          <div class="relative aspect-[3/4] overflow-hidden bg-slate-900 cursor-pointer" onclick="handleCardClick('${item.title}', '${item.genre}', '${item.quality}', '2h 15m')">
+            <img src="${item.img}" alt="${item.title}" class="w-full h-full object-cover group-hover:scale-105 transition-transform" referrerpolicy="no-referrer" />
+            <div class="absolute inset-0 bg-gradient-to-t from-black/90 via-transparent to-transparent"></div>
+            <span class="absolute top-2 right-2 px-2 py-0.5 rounded bg-black/70 text-[10px] font-mono font-bold text-emerald-400 border border-emerald-500/30">
+              ${item.quality}
+            </span>
+            <div class="absolute bottom-2 left-2 right-2">
+              <h4 class="text-xs font-bold text-white truncate">${item.title}</h4>
+              <p class="text-[10px] text-slate-300">${item.year} · ${item.genre}</p>
+            </div>
+          </div>
+          <div class="p-2 flex items-center justify-between gap-1.5 bg-[#101018] light:bg-slate-50 border-t border-slate-800/80">
+            <button onclick="handleDualClick('${item.title}', 'discovery-watch')" class="flex-1 py-1 rounded bg-emerald-500/20 hover:bg-emerald-500 text-emerald-400 hover:text-slate-950 text-[11px] font-bold transition-colors">
+              Watch
+            </button>
+            <button onclick="addToWatchlist('${item.title}', '${item.year}', '${item.genre}')" class="p-1 text-slate-400 hover:text-emerald-400">
+              <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            </button>
+          </div>
+        </div>
+      `).join('');
+
+      lucide.createIcons();
+    }
+
+    // =========================================================
+    // PRICING BILLING CYCLE SWITCHER
+    // =========================================================
+    function setBillingCycle(cycle) {
+      billingCycle = cycle;
+      const mBtn = document.getElementById('billingMonthlyBtn');
+      const aBtn = document.getElementById('billingAnnuallyBtn');
+      const proPrice = document.getElementById('pricePro');
+      const teamPrice = document.getElementById('priceTeam');
+
+      if (cycle === 'annually') {
+        aBtn.classList.add('bg-emerald-500', 'text-slate-950');
+        aBtn.classList.remove('text-slate-400', 'light:text-slate-600');
+        mBtn.classList.remove('bg-emerald-500', 'text-slate-950');
+        mBtn.classList.add('text-slate-400', 'light:text-slate-600');
+
+        proPrice.textContent = '$8';
+        teamPrice.textContent = '$39';
+        showToast('Applied Annual Discount: Save 20% on all plans');
+      } else {
+        mBtn.classList.add('bg-emerald-500', 'text-slate-950');
+        mBtn.classList.remove('text-slate-400', 'light:text-slate-600');
+        aBtn.classList.remove('bg-emerald-500', 'text-slate-950');
+        aBtn.classList.add('text-slate-400', 'light:text-slate-600');
+
+        proPrice.textContent = '$10';
+        teamPrice.textContent = '$49';
+        showToast('Switched to standard Monthly billing');
+      }
+    }
+
+    // Scroll helper
+    function scrollToSection(id) {
+      const el = document.getElementById(id);
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth' });
+      }
+    }
+
+    function scrollMovieCarousel(direction) {
+      const carousel = document.getElementById('popularCarousel');
+      if (carousel) {
+        carousel.scrollBy({ left: direction * 320, behavior: 'smooth' });
+      }
+    }
+
+    function remindMovie(title) {
+      showToast(`Reminder scheduled for "${title}"! We'll alert you on premiere day.`);
+    }
+
+    function createWatchParty() {
+      showToast('Watch Party Room created! Shared invite link generated.');
+    }
+
+    // =========================================================
+    // INTERACTIVE TOAST NOTIFICATION SYSTEM
+    // =========================================================
+    function showToast(message) {
+      const container = document.getElementById('toastContainer');
+      const toast = document.createElement('div');
+      toast.className = 'pointer-events-auto flex items-center gap-2.5 px-4 py-3 rounded-2xl bg-[#141822] light:bg-slate-900 border border-emerald-500/40 text-white text-xs font-semibold shadow-2xl shadow-emerald-500/10 transform translate-y-3 opacity-0 transition-all duration-200';
+      toast.innerHTML = `
+        <span class="w-2 h-2 rounded-full bg-emerald-400 shrink-0 animate-ping"></span>
+        <span>${message}</span>
+      `;
+      container.appendChild(toast);
+
+      // Animate in
+      requestAnimationFrame(() => {
+        toast.classList.remove('translate-y-3', 'opacity-0');
+      });
+
+      // Remove after 3.5s
+      setTimeout(() => {
+        toast.classList.add('opacity-0', 'translate-y-3');
+        setTimeout(() => toast.remove(), 250);
+      }, 3500);
+    }
+
+    // Initialize Lucide icons on boot
+    window.addEventListener('DOMContentLoaded', () => {
+      lucide.createIcons();
+      updateWatchlistBadge();
+    });
+  </script>
+
+</body>
+</html>
